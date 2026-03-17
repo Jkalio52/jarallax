@@ -17,6 +17,21 @@ describe('build artifact compatibility', () => {
     expect(pkg.unpkg).toBe('dist/jarallax.min.js');
     expect(pkg.style).toBe('dist/jarallax.css');
     expect(pkg.types).toBe('./dist/types/src/public-api.d.ts');
+    expect(pkg.files).toEqual(expect.arrayContaining(['src', 'dist', 'typings']));
+    expect(pkg.exports).toMatchObject({
+      '.': {
+        types: './dist/types/src/public-api.d.ts',
+        import: './dist/jarallax.esm.js',
+        require: './dist/jarallax.cjs',
+        default: './dist/jarallax.esm.js',
+      },
+      './dist/*': './dist/*',
+      './src/*': './src/*',
+      './typings': './typings/index.d.ts',
+      './jarallax-video.js': './dist/jarallax-video.js',
+      './jarallax-element.js': './dist/jarallax-element.js',
+      './jarallax.min.css': './dist/jarallax.min.css',
+    });
   });
 
   it('ships the required dist artifacts', () => {

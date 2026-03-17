@@ -10,6 +10,30 @@
   "unpkg": "dist/jarallax.min.js",
   "style": "dist/jarallax.css",
   "types": "./dist/types/src/public-api.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/types/src/public-api.d.ts",
+      "import": "./dist/jarallax.esm.js",
+      "require": "./dist/jarallax.cjs",
+      "default": "./dist/jarallax.esm.js"
+    },
+    "./package.json": "./package.json",
+    "./dist/*": "./dist/*",
+    "./src/*": "./src/*",
+    "./typings": "./typings/index.d.ts",
+    "./typings/*": "./typings/*",
+    "./jarallax.cjs": "./dist/jarallax.cjs",
+    "./jarallax.esm.js": "./dist/jarallax.esm.js",
+    "./jarallax.esm.min.js": "./dist/jarallax.esm.min.js",
+    "./jarallax.js": "./dist/jarallax.js",
+    "./jarallax.min.js": "./dist/jarallax.min.js",
+    "./jarallax.css": "./dist/jarallax.css",
+    "./jarallax.min.css": "./dist/jarallax.min.css",
+    "./jarallax-video.js": "./dist/jarallax-video.js",
+    "./jarallax-video.min.js": "./dist/jarallax-video.min.js",
+    "./jarallax-element.js": "./dist/jarallax-element.js",
+    "./jarallax-element.min.js": "./dist/jarallax-element.min.js"
+  },
   "files": [
     "src",
     "dist",
@@ -27,7 +51,7 @@
     "lint": "biome lint .",
     "lint:fix": "biome lint --write .",
     "format": "biome format --write .",
-    "format:check": "biome format --check .",
+    "format:check": "biome format .",
     "prepare": "husky install"
   },
   "repository": {

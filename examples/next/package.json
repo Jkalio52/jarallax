@@ -1,12 +1,14 @@
 {
   "private": true,
   "scripts": {
-    "start": "next dev"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
   },
   "dependencies": {
-    "jarallax": "latest"
-  },
-  "devDependencies": {
-    "next": "^12.0.10"
+    "jarallax": "latest",
+    "next": "^12.0.10",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
   }
 }

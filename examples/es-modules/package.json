@@ -1,10 +1,8 @@
 {
   "private": true,
   "scripts": {
-    "start": "browser-sync start --server --open local"
-  },
-  "dependencies": {
-    "jarallax": "latest"
+    "dev": "browser-sync start --server --open local --files \"./*.html,./*.css,../../dist/**/*\"",
+    "start": "npm run dev"
   },
   "devDependencies": {
     "browser-sync": "^2.27.7"

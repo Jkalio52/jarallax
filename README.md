@@ -15,7 +15,8 @@ Parallax scrolling for modern browsers. Supported &lt;img&gt; tags, background i
   - [ESM CDN](#esm-cdn)
   - [UMD](#umd)
   - [UMD CDN](#umd-cdn)
-  - [CJS (Bundlers like Webpack)](#cjs-bundlers-like-webpack)
+  - [Package Imports (Bundlers / Node)](#package-imports-bundlers--node)
+  - [TypeScript](#typescript)
 - [Prepare HTML](#prepare-html)
 - [Run Jarallax](#run-jarallax)
   - [A. JavaScript way](#a-javascript-way)
@@ -65,18 +66,20 @@ Use one of the following examples to import jarallax.
 
 ### ESM
 
-We provide a version of Jarallax built as ESM (jarallax.esm.js and jarallax.esm.min.js) which allows you to use Jarallax as a module in your browser, if your [targeted browsers support it](https://caniuse.com/es6-module).
+We ship self-hosted ESM bundles (`dist/jarallax.esm.js` and `dist/jarallax.esm.min.js`) for browsers that support ES modules.
 
 ```html
 <!-- Jarallax CSS -->
-<link href="jarallax.min.css" rel="stylesheet">
+<link href="./node_modules/jarallax/dist/jarallax.min.css" rel="stylesheet">
 
 <!-- Jarallax JS -->
 <script type="module">
-  import { jarallax, jarallaxVideo } from "jarallax.esm.min.js";
+  import { jarallax, jarallaxVideo } from "./node_modules/jarallax/dist/jarallax.esm.js";
 
   // Optional video extension
   jarallaxVideo();
+
+  jarallax(document.querySelectorAll('.jarallax'));
 </script>
 ```
 
@@ -123,15 +126,15 @@ Jarallax may be also used in a traditional way by including script in HTML and u
 <script src="https://cdn.jsdelivr.net/npm/jarallax@2/dist/jarallax-video.min.js"></script>
 ```
 
-### CJS (Bundlers like Webpack)
+### Package Imports (Bundlers / Node)
 
-Install Jarallax as a Node.js module using npm
+Install Jarallax as a Node.js module using npm.
 
 ```
 npm install jarallax
 ```
 
-Import Jarallax by adding this line to your app's entry point (usually `index.js` or `app.js`):
+Use the package root in modern bundlers:
 
 ```javascript
 import { jarallax, jarallaxVideo } from "jarallax";
@@ -139,6 +142,35 @@ import 'jarallax/dist/jarallax.min.css';
 
 // Optional video extension
 jarallaxVideo();
+
+jarallax(document.querySelectorAll('.jarallax'));
+```
+
+The CommonJS entry point remains available for older bundlers and Node-based setups:
+
+```javascript
+const { jarallax, jarallaxVideo } = require('jarallax');
+require('jarallax/dist/jarallax.min.css');
+
+jarallaxVideo();
+jarallax(document.querySelectorAll('.jarallax'));
+```
+
+### TypeScript
+
+Generated declarations are published from `dist/types`, while `typings/index.d.ts` remains as a compatibility re-export.
+
+```ts
+import { jarallax, jarallaxVideo, type JarallaxOptions } from 'jarallax';
+import 'jarallax/dist/jarallax.min.css';
+
+const options: JarallaxOptions = {
+  speed: 0.2,
+  videoSrc: 'https://www.youtube.com/watch?v=ab0TSkLe-E0',
+};
+
+jarallaxVideo();
+jarallax(document.querySelectorAll<HTMLElement>('.jarallax'), options);
 ```
 
 ## Prepare HTML
@@ -291,7 +323,7 @@ jarallax(document.querySelectorAll('.jarallax'), {
 
 ### Additional options for video extension
 
-Required `jarallax/jarallax-video.js` file.
+Requires the video extension bundle. In package-based apps call `jarallaxVideo()` after importing from `jarallax`. In script-tag usage load `dist/jarallax-video(.min).js` after the core bundle.
 
 Name | Type | Default | Description
 :--- | :--- | :------ | :----------
@@ -317,7 +349,7 @@ onCoverImage | Called after cover image.
 
 ### Additional events for video extension
 
-Required `jarallax/jarallax-video.js` file.
+Requires the video extension bundle. In package-based apps call `jarallaxVideo()` after importing from `jarallax`. In script-tag usage load `dist/jarallax-video(.min).js` after the core bundle.
 
 Name | Description
 :--- | :----------
@@ -387,21 +419,34 @@ $('.jarallax').jarallax('destroy');
 
 ### Installation <!-- omit in toc -->
 
-* Run `npm install` in the command line
+* Run `npm install` in the repository root
 
-### Building <!-- omit in toc -->
+### Core workflows <!-- omit in toc -->
 
 * `npm run dev` to run build and start local server with files watcher
-* `npm run build` to run build
+* `npm run build` to build all distributable bundles and declarations
+* `npm run typecheck` to type-check source and Vitest coverage
 
-### Linting <!-- omit in toc -->
+### Quality checks <!-- omit in toc -->
 
-* `npm run js-lint` to show eslint errors
-* `npm run js-lint-fix` to automatically fix some of the eslint errors
+* `npm run lint` to run Biome lint checks
+* `npm run lint:fix` to apply Biome lint fixes
+* `npm run format:check` to verify formatting
+* `npm run format` to apply formatting
 
 ### Test <!-- omit in toc -->
 
-* `npm run test` to run unit tests
+* `npm run test` for interactive Vitest
+* `npm run test:run` for a single CI-style test run
+* `npm run test:coverage` for coverage output
+* `npm run test:artifacts` to validate the published package contract
+
+### Examples in this repository <!-- omit in toc -->
+
+* The HTML, JavaScript, jQuery, and ES modules examples under `examples/` use CDN assets so they can be opened without a local package build
+* In `examples/es-modules`, run `npm install` and `npm run dev` to serve the example through BrowserSync while keeping CDN imports
+* In `examples/next`, run `npm install` and `npm run dev` to test the published package shape through Next.js
+* In `examples/next-advanced`, run `npm install` and `npm run dev` to test dynamic block updates against the published package shape
 
 ## Real Usage Examples
 
