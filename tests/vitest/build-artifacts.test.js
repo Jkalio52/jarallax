@@ -1,7 +1,9 @@
+import { spawnSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
 import { createRequire } from 'node:module';
 import { fileURLToPath } from 'node:url';
+import { pathToFileURL } from 'node:url';
 import vm from 'node:vm';
 import { describe, expect, it } from 'vitest';
 
@@ -72,6 +74,37 @@ describe('build artifact compatibility', () => {
     expect(entry.jarallax).toBeTypeOf('function');
     expect(entry.jarallaxVideo).toBeTypeOf('function');
     expect(entry.jarallaxElement).toBeTypeOf('function');
+  });
+
+  it('allows SSR-safe package imports without a DOM', () => {
+    const cjsBundlePath = path.join(rootDir, 'dist/jarallax.cjs');
+    const esmBundleUrl = pathToFileURL(path.join(rootDir, 'dist/jarallax.esm.js')).href;
+    const cjsRun = spawnSync(
+      process.execPath,
+      [
+        '-e',
+        `const entry = require(${JSON.stringify(cjsBundlePath)});\nentry.jarallax([], { speed: 0.2 });\nentry.jarallax([], 'destroy');\nconsole.log(Object.keys(entry).sort().join(','));`,
+      ],
+      {
+        encoding: 'utf8',
+      }
+    );
+    const esmRun = spawnSync(
+      process.execPath,
+      [
+        '--input-type=module',
+        '-e',
+        `const entry = await import(${JSON.stringify(esmBundleUrl)});\nentry.jarallax([], { speed: 0.2 });\nentry.jarallax([], 'destroy');\nconsole.log(Object.keys(entry).sort().join(','));`,
+      ],
+      {
+        encoding: 'utf8',
+      }
+    );
+
+    expect(cjsRun.status, cjsRun.stderr).toBe(0);
+    expect(cjsRun.stdout.trim()).toBe('jarallax,jarallaxElement,jarallaxVideo');
+    expect(esmRun.status, esmRun.stderr).toBe(0);
+    expect(esmRun.stdout.trim()).toBe('jarallax,jarallaxElement,jarallaxVideo');
   });
 
   it('keeps the legacy UMD global names intact', () => {

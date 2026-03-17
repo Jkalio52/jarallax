@@ -82,6 +82,9 @@ function getParents(elem) {
 }
 
 function ready(callback) {
+  if (typeof document === "undefined") {
+    return;
+  }
   if (document.readyState === "complete" || document.readyState === "interactive") {
     callback();
   } else {
@@ -103,7 +106,13 @@ function isMobile() {
 let wndW = 0;
 let wndH = 0;
 let deviceHelper = null;
+function hasDocument() {
+  return typeof document !== "undefined" && typeof document.documentElement !== "undefined";
+}
 function getDeviceHeight() {
+  if (!hasDocument()) {
+    return global$2.innerHeight || 0;
+  }
   if (!deviceHelper && document.body) {
     deviceHelper = document.createElement("div");
     deviceHelper.style.cssText = "position: fixed; top: -9999px; left: 0; height: 100vh; width: 0;";
@@ -112,6 +121,11 @@ function getDeviceHeight() {
   return (deviceHelper ? deviceHelper.clientHeight : 0) || global$2.innerHeight || document.documentElement.clientHeight;
 }
 function updateWindowHeight() {
+  if (!hasDocument()) {
+    wndW = global$2.innerWidth || 0;
+    wndH = global$2.innerHeight || 0;
+    return;
+  }
   wndW = global$2.innerWidth || document.documentElement.clientWidth;
   wndH = isMobile() ? getDeviceHeight() : global$2.innerHeight || document.documentElement.clientHeight;
 }
@@ -194,6 +208,7 @@ function removeObserver(instance) {
 }
 
 const globalNavigator = global$2.navigator ?? { userAgent: "" };
+const canUseDOM = typeof document !== "undefined" && typeof Element !== "undefined" && typeof HTMLElement !== "undefined";
 let instanceID = 0;
 function resolveDisableOption(value) {
   if (typeof value === "string") {
@@ -277,7 +292,7 @@ class Jarallax {
     return {
       width,
       height,
-      y: document.documentElement.scrollTop
+      y: canUseDOM ? document.documentElement.scrollTop : 0
     };
   }
   initImg() {
@@ -551,8 +566,17 @@ class Jarallax {
 }
 const jarallax$1 = function jarallax2(items, options, ...args) {
   let normalizedItems = items;
+  if (!items) {
+    return items;
+  }
   if (typeof HTMLElement === "object" ? items instanceof HTMLElement : items && typeof items === "object" && items.nodeType === 1 && typeof items.nodeName === "string") {
     normalizedItems = [items];
+  }
+  if (!normalizedItems || typeof normalizedItems !== "object" || typeof normalizedItems.length !== "number") {
+    return normalizedItems;
+  }
+  if (!canUseDOM) {
+    return typeof options === "string" ? void 0 : normalizedItems;
   }
   let ret;
   for (let index = 0; index < normalizedItems.length; index += 1) {

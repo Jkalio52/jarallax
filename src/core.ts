@@ -18,6 +18,10 @@ import type {
 } from './types';
 
 const globalNavigator = global.navigator ?? ({ userAgent: '' } as Navigator);
+const canUseDOM =
+  typeof document !== 'undefined' &&
+  typeof Element !== 'undefined' &&
+  typeof HTMLElement !== 'undefined';
 
 let instanceID = 0;
 
@@ -159,7 +163,7 @@ class Jarallax {
     return {
       width,
       height,
-      y: document.documentElement.scrollTop,
+      y: canUseDOM ? document.documentElement.scrollTop : 0,
     };
   }
 
@@ -533,6 +537,10 @@ const jarallax: JarallaxStatic = function jarallax(
 ): JarallaxItems | unknown {
   let normalizedItems: ArrayLike<JarallaxItem> = items as ArrayLike<JarallaxItem>;
 
+  if (!items) {
+    return items;
+  }
+
   // Keep the public entrypoint flexible: single node, array-like collections and jQuery sets all work.
   if (
     typeof HTMLElement === 'object'
@@ -543,6 +551,18 @@ const jarallax: JarallaxStatic = function jarallax(
         typeof (items as Node).nodeName === 'string'
   ) {
     normalizedItems = [items as JarallaxItem];
+  }
+
+  if (
+    !normalizedItems ||
+    typeof normalizedItems !== 'object' ||
+    typeof (normalizedItems as { length?: unknown }).length !== 'number'
+  ) {
+    return normalizedItems;
+  }
+
+  if (!canUseDOM) {
+    return typeof options === 'string' ? undefined : normalizedItems;
   }
 
   let ret: unknown;

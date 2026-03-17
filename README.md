@@ -146,7 +146,9 @@ jarallaxVideo();
 jarallax(document.querySelectorAll('.jarallax'));
 ```
 
-The CommonJS entry point remains available for older bundlers and Node-based setups:
+The package root is safe to import in SSR and Node toolchains, but Jarallax is still a frontend-only runtime and must only be initialized once a real browser DOM exists.
+
+The CommonJS entry point remains available for older bundlers and browser-targeted build setups:
 
 ```javascript
 const { jarallax, jarallaxVideo } = require('jarallax');
@@ -155,6 +157,8 @@ require('jarallax/dist/jarallax.min.css');
 jarallaxVideo();
 jarallax(document.querySelectorAll('.jarallax'));
 ```
+
+In SSR frameworks such as React or Next.js, keep the import at module scope if you want, but call `jarallax()` only in a client-only lifecycle or behind a `typeof window !== 'undefined'` guard.
 
 ### TypeScript
 

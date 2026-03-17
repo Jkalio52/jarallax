@@ -6,9 +6,17 @@ let wndW = 0;
 let wndH = 0;
 let deviceHelper: HTMLDivElement | null = null;
 
+function hasDocument(): boolean {
+  return typeof document !== 'undefined' && typeof document.documentElement !== 'undefined';
+}
+
 // Mobile browsers often change the reported viewport height while scrolling.
 // Measuring a hidden 100vh helper keeps the parallax geometry stable.
 function getDeviceHeight(): number {
+  if (!hasDocument()) {
+    return global.innerHeight || 0;
+  }
+
   if (!deviceHelper && document.body) {
     deviceHelper = document.createElement('div');
     deviceHelper.style.cssText = 'position: fixed; top: -9999px; left: 0; height: 100vh; width: 0;';
@@ -23,6 +31,12 @@ function getDeviceHeight(): number {
 }
 
 function updateWindowHeight(): void {
+  if (!hasDocument()) {
+    wndW = global.innerWidth || 0;
+    wndH = global.innerHeight || 0;
+    return;
+  }
+
   wndW = global.innerWidth || document.documentElement.clientWidth;
   wndH = isMobile()
     ? getDeviceHeight()

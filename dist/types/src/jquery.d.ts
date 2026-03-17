@@ -8,7 +8,6 @@ declare global {
         jarallax(methodName: 'coverImage'): JarallaxCoverImageData | true | void;
     }
     interface JQueryStatic {
-        jarallax?: JarallaxStatic;
         readonly fn: JQuery;
     }
     interface Window {

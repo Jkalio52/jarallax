@@ -1042,6 +1042,9 @@
   };
 
   function ready(callback) {
+    if (typeof document === "undefined") {
+      return;
+    }
     if (document.readyState === "complete" || document.readyState === "interactive") {
       callback();
     } else {
