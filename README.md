@@ -17,6 +17,7 @@ Parallax scrolling for modern browsers. Supported &lt;img&gt; tags, background i
   - [UMD CDN](#umd-cdn)
   - [Package Imports (Bundlers / Node)](#package-imports-bundlers--node)
   - [TypeScript](#typescript)
+  - [React / Next.js](#react--nextjs)
 - [Prepare HTML](#prepare-html)
 - [Run Jarallax](#run-jarallax)
   - [A. JavaScript way](#a-javascript-way)
@@ -54,9 +55,11 @@ Download: <https://wordpress.org/plugins/advanced-backgrounds/>
 There are a set of examples, which you can use as a starting point with Jarallax.
 
 - [ES Modules](examples/es-modules)
+- [React](examples/react)
+- [React Hooks](examples/react-hooks)
 - [JavaScript](examples/javascript)
-- [Next.js](examples/next)
-- [Next.js Advanced Usage](examples/next-advanced)
+- [Next.js App Router](examples/next)
+- [Next.js App Router Advanced Usage](examples/next-advanced)
 - [HTML](examples/html)
 - [jQuery](examples/jquery)
 
@@ -176,6 +179,96 @@ const options: JarallaxOptions = {
 jarallaxVideo();
 jarallax(document.querySelectorAll<HTMLElement>('.jarallax'), options);
 ```
+
+### React / Next.js
+
+The `jarallax/react` subpath keeps imports SSR-safe while delaying all DOM work until `useEffect` runs on the client.
+
+The built-in React components apply the required base Jarallax styles automatically, so you do not need to import `jarallax.css` manually when using `Jarallax`, `JarallaxImage`, or `JarallaxVideo`.
+
+Component API:
+
+```tsx
+'use client';
+
+import {
+  Jarallax,
+  JarallaxImage,
+  JarallaxVideo,
+} from 'jarallax/react';
+
+export function Hero() {
+  return (
+    <Jarallax className="hero" options={{ speed: 0.4 }}>
+      <JarallaxImage
+        src="https://jarallax.nkdev.info/images/image-1.jpg"
+        alt=""
+      />
+      <h1>Jarallax React</h1>
+    </Jarallax>
+  );
+}
+
+export function VideoHero() {
+  return (
+    <JarallaxVideo
+      className="hero"
+      options={{ speed: 0.2 }}
+      videoSrc="https://youtu.be/mru3Q5m4lkY"
+    />
+  );
+}
+```
+
+Hook API for custom markup:
+
+```tsx
+'use client';
+
+import { useJarallax } from 'jarallax/react';
+
+export function CustomMarkupHero() {
+  const ref = useJarallax({
+    options: {
+      speed: 0.4,
+    },
+  });
+
+  return (
+    <section ref={ref} className="jarallax hero">
+      <img
+        className="jarallax-img"
+        src="https://jarallax.nkdev.info/images/image-2.jpg"
+        alt=""
+      />
+      <h2>Hook-based markup control</h2>
+    </section>
+  );
+}
+```
+
+Video hook API:
+
+```tsx
+'use client';
+
+import { useJarallaxVideo } from 'jarallax/react';
+
+export function CustomVideoHero() {
+  const ref = useJarallaxVideo({
+    options: {
+      speed: 0.2,
+    },
+    videoSrc: 'https://youtu.be/mru3Q5m4lkY',
+  });
+
+  return <section ref={ref} className="jarallax hero" />;
+}
+```
+
+`useJarallax` and `useJarallaxVideo` are part of the React API when you want full control over the rendered markup.
+
+For Next.js App Router, keep these components in files marked with `'use client';`. Server rendering only outputs regular HTML, and the parallax instance is created after hydration on the client.
 
 ## Prepare HTML
 

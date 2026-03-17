@@ -38,6 +38,7 @@ const pathCore = './src/core.esm.ts';
 const pathCoreUmd = './src/core.umd.ts';
 const pathExtVideoUmd = './src/ext-video.umd.ts';
 const pathExtElementUmd = './src/deprecated/ext-element.umd.ts';
+const pathReact = './src/react/index.ts';
 
 const bundles = [
   // Core.
@@ -84,6 +85,17 @@ const bundles = [
       file: './dist/jarallax.cjs',
       format: 'cjs',
     },
+  },
+
+  // React Entry.
+  {
+    input: pathReact,
+    output: {
+      banner: getHeader(),
+      file: './dist/react/index.js',
+      format: 'esm',
+    },
+    external: ['react'],
   },
 
   // Video Extension.
@@ -143,8 +155,9 @@ function createTypeScriptPlugin() {
   });
 }
 
-const configs = bundles.map(({ input: inputPath, output }) => ({
+const configs = bundles.map(({ input: inputPath, output, external = [] }) => ({
   input: inputPath,
+  external,
   output,
   plugins: [
     nodeResolve({

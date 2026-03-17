@@ -27,6 +27,11 @@ describe('build artifact compatibility', () => {
         require: './dist/jarallax.cjs',
         default: './dist/jarallax.esm.js',
       },
+      './react': {
+        types: './dist/types/src/react/index.d.ts',
+        import: './dist/react/index.js',
+        default: './dist/react/index.js',
+      },
       './dist/*': './dist/*',
       './src/*': './src/*',
       './typings': './typings/index.d.ts',
@@ -43,6 +48,7 @@ describe('build artifact compatibility', () => {
       'dist/jarallax.esm.js',
       'dist/jarallax.esm.min.js',
       'dist/jarallax.js',
+      'dist/react/index.js',
       'dist/jarallax.min.css',
       'dist/jarallax.min.js',
       'dist/jarallax-video.js',
@@ -50,6 +56,7 @@ describe('build artifact compatibility', () => {
       'dist/jarallax-element.js',
       'dist/jarallax-element.min.js',
       'dist/types/src/public-api.d.ts',
+      'dist/types/src/react/index.d.ts',
       'typings/index.d.ts',
     ];
 
@@ -74,6 +81,23 @@ describe('build artifact compatibility', () => {
     expect(entry.jarallax).toBeTypeOf('function');
     expect(entry.jarallaxVideo).toBeTypeOf('function');
     expect(entry.jarallaxElement).toBeTypeOf('function');
+  });
+
+  it('keeps the React ESM subpath importable without a DOM', async () => {
+    const entry = await import('../../dist/react/index.js');
+
+    expect(Object.keys(entry).sort()).toEqual([
+      'Jarallax',
+      'JarallaxImage',
+      'JarallaxVideo',
+      'useJarallax',
+      'useJarallaxVideo',
+    ]);
+    expect(entry.Jarallax).toBeTypeOf('object');
+    expect(entry.JarallaxImage).toBeTypeOf('object');
+    expect(entry.JarallaxVideo).toBeTypeOf('object');
+    expect(entry.useJarallax).toBeTypeOf('function');
+    expect(entry.useJarallaxVideo).toBeTypeOf('function');
   });
 
   it('allows SSR-safe package imports without a DOM', () => {

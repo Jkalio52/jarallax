@@ -34,6 +34,7 @@ function installGeometryStub(element) {
 
 beforeEach(() => {
   document.body.innerHTML = '<div id="app"></div>';
+  globalThis.IS_REACT_ACT_ENVIRONMENT = true;
 
   vi.stubGlobal(
     'requestAnimationFrame',
