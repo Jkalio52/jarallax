@@ -1,6 +1,6 @@
 /*!
  * Jarallax v2.2.1 (https://github.com/nk-o/jarallax)
- * Copyright 2024 nK <https://nkdev.info>
+ * Copyright 2026 nK <https://nkdev.info>
  * Licensed under MIT (https://github.com/nk-o/jarallax/blob/master/LICENSE)
  */
 (function (global, factory) {
@@ -550,7 +550,7 @@
         if (!originalStylesImgTag) {
           self.image.$item.removeAttribute('style');
         } else {
-          self.image.$item.setAttribute('style', originalStylesTag);
+          self.image.$item.setAttribute('style', originalStylesImgTag);
         }
 
         // move img tag to its default position
