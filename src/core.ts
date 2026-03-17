@@ -29,7 +29,9 @@ let instanceID = 0;
 // Normalize everything to a callable check so the rest of the runtime only deals with one shape.
 function resolveDisableOption(value: DisableOption | undefined): () => boolean {
   if (typeof value === 'string') {
-    value = new RegExp(value);
+    const regexpMatch = value.match(/^\/(.*)\/([dgimsuvy]*)$/);
+
+    value = regexpMatch ? new RegExp(regexpMatch[1], regexpMatch[2]) : new RegExp(value);
   }
 
   if (value instanceof RegExp) {

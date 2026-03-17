@@ -1,14 +1,14 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { createJarallaxBlock } from './helpers.js';
+import { createJarallaxBlock } from './test-helpers.js';
 
-describe('jarallax video URL compatibility', () => {
+describe('jarallax video source parsing', () => {
   beforeEach(() => {
     vi.resetModules();
   });
 
   it('parses the legacy set of supported video URLs', async () => {
-    const { default: jarallax } = await import('../../src/core.ts');
-    const { default: jarallaxVideo } = await import('../../src/ext-video.ts');
+    const { default: jarallax } = await import('../src/core.ts');
+    const { default: jarallaxVideo } = await import('../src/ext-video.ts');
     const block = createJarallaxBlock({ mode: 'img' });
 
     jarallaxVideo(jarallax);

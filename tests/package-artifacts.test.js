@@ -7,8 +7,9 @@ import { pathToFileURL } from 'node:url';
 import vm from 'node:vm';
 import { describe, expect, it } from 'vitest';
 
-const rootDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
+const rootDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const require = createRequire(import.meta.url);
+
 
 describe('build artifact compatibility', () => {
   it('keeps package entry points aligned with the Phase 1 snapshot', () => {
@@ -66,7 +67,7 @@ describe('build artifact compatibility', () => {
   });
 
   it('exposes the current ESM export names from the built bundle', async () => {
-    const entry = await import('../../dist/jarallax.esm.js');
+    const entry = await import('../dist/jarallax.esm.js');
 
     expect(Object.keys(entry).sort()).toEqual(['jarallax', 'jarallaxElement', 'jarallaxVideo']);
     expect(entry.jarallax).toBeTypeOf('function');
@@ -84,7 +85,7 @@ describe('build artifact compatibility', () => {
   });
 
   it('keeps the React ESM subpath importable without a DOM', async () => {
-    const entry = await import('../../dist/react/index.js');
+    const entry = await import('../dist/react/index.js');
 
     expect(Object.keys(entry).sort()).toEqual([
       'Jarallax',

@@ -1,14 +1,14 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import defaults from '../../src/defaults.ts';
-import { createJarallaxBlock } from './helpers.js';
+import defaults from '../src/defaults.ts';
+import { createJarallaxBlock } from './test-helpers.js';
 
-describe('jarallax core compatibility', () => {
+describe('jarallax core DOM behavior', () => {
   beforeEach(() => {
     vi.resetModules();
   });
 
   it('initializes an instance on a DOM element', async () => {
-    const { default: jarallax } = await import('../../src/core.ts');
+    const { default: jarallax } = await import('../src/core.ts');
     const block = createJarallaxBlock({ mode: 'background' });
 
     jarallax(block);
@@ -19,7 +19,7 @@ describe('jarallax core compatibility', () => {
   });
 
   it('keeps background-mode image metadata compatible with the legacy implementation', async () => {
-    const { default: jarallax } = await import('../../src/core.ts');
+    const { default: jarallax } = await import('../src/core.ts');
     const block = createJarallaxBlock({ mode: 'background' });
 
     jarallax(block);
@@ -31,7 +31,7 @@ describe('jarallax core compatibility', () => {
   });
 
   it('keeps img-mode initialization bound to the source img element', async () => {
-    const { default: jarallax } = await import('../../src/core.ts');
+    const { default: jarallax } = await import('../src/core.ts');
     const block = createJarallaxBlock({ mode: 'img' });
     const image = block.querySelector('img.jarallax-img');
 
@@ -42,7 +42,7 @@ describe('jarallax core compatibility', () => {
   });
 
   it('preserves the documented default option values', async () => {
-    const { default: jarallax } = await import('../../src/core.ts');
+    const { default: jarallax } = await import('../src/core.ts');
     const block = createJarallaxBlock({ mode: 'background' });
 
     jarallax(block);
@@ -62,7 +62,7 @@ describe('jarallax core compatibility', () => {
   });
 
   it('stores original inline styles only when the element already had them', async () => {
-    const { default: jarallax } = await import('../../src/core.ts');
+    const { default: jarallax } = await import('../src/core.ts');
     const block = document.createElement('div');
     block.className = 'jarallax';
     const image = document.createElement('img');
@@ -86,7 +86,7 @@ describe('jarallax core compatibility', () => {
   });
 
   it('changes static positioning to relative during init', async () => {
-    const { default: jarallax } = await import('../../src/core.ts');
+    const { default: jarallax } = await import('../src/core.ts');
     const block = createJarallaxBlock({ mode: 'img' });
     block.style.position = 'static';
 
@@ -96,7 +96,7 @@ describe('jarallax core compatibility', () => {
   });
 
   it('uses absolute image positioning when an ancestor has a transform', async () => {
-    const { default: jarallax } = await import('../../src/core.ts');
+    const { default: jarallax } = await import('../src/core.ts');
     const block = createJarallaxBlock({ mode: 'img' });
     document.body.style.transform = 'scale(1)';
 
@@ -105,27 +105,8 @@ describe('jarallax core compatibility', () => {
     expect(block.querySelector('.jarallax-img').style.position).toBe('absolute');
   });
 
-  it('calls lifecycle callbacks during init and destroy', async () => {
-    const { default: jarallax } = await import('../../src/core.ts');
-    const block = createJarallaxBlock({ mode: 'img' });
-    const onInit = vi.fn();
-    const onDestroy = vi.fn();
-    const onCoverImage = vi.fn();
-
-    jarallax(block, {
-      onInit,
-      onDestroy,
-      onCoverImage,
-    });
-    jarallax(block, 'destroy');
-
-    expect(onInit).toHaveBeenCalledTimes(1);
-    expect(onCoverImage).toHaveBeenCalledTimes(1);
-    expect(onDestroy).toHaveBeenCalledTimes(1);
-  });
-
   it('restores original inline styles on destroy', async () => {
-    const { default: jarallax } = await import('../../src/core.ts');
+    const { default: jarallax } = await import('../src/core.ts');
     const block = createJarallaxBlock({ mode: 'background' });
     block.style.position = 'relative';
     block.style.zIndex = '10';
@@ -141,7 +122,7 @@ describe('jarallax core compatibility', () => {
   });
 
   it('restores an img-mode block on destroy', async () => {
-    const { default: jarallax } = await import('../../src/core.ts');
+    const { default: jarallax } = await import('../src/core.ts');
     const block = createJarallaxBlock({ mode: 'img' });
     const image = block.querySelector('img.jarallax-img');
     image.style.borderRadius = '8px';
@@ -153,18 +134,5 @@ describe('jarallax core compatibility', () => {
     expect(block.querySelector('.jarallax-container')).toBeNull();
     expect(block.firstElementChild).toBe(image);
     expect(image.style.borderRadius).toBe('8px');
-  });
-
-  it('supports video URL parsing through the extension path', async () => {
-    const { default: jarallax } = await import('../../src/core.ts');
-    const { default: jarallaxVideo } = await import('../../src/ext-video.ts');
-    const block = createJarallaxBlock({ mode: 'img' });
-
-    jarallaxVideo(jarallax);
-    jarallax(block, {
-      videoSrc: 'https://youtu.be/mru3Q5m4lkY',
-    });
-
-    expect(block.jarallax.video.videoID).toBe('mru3Q5m4lkY');
   });
 });

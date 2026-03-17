@@ -1,5 +1,6 @@
 import { afterEach, beforeEach, vi } from 'vitest';
 import jqueryFactory from 'jquery';
+import { createRect } from './test-helpers.js';
 
 class FakeIntersectionObserver {
   observe(target) {
@@ -16,19 +17,7 @@ class FakeIntersectionObserver {
 function installGeometryStub(element) {
   Object.defineProperty(element, 'getBoundingClientRect', {
     configurable: true,
-    value: () => ({
-      top: 0,
-      left: 0,
-      width: 320,
-      height: 180,
-      bottom: 180,
-      right: 320,
-      x: 0,
-      y: 0,
-      toJSON() {
-        return this;
-      },
-    }),
+    value: () => createRect(),
   });
 }
 

@@ -29,14 +29,8 @@ export interface JarallaxWindowData {
 }
 
 export type DisableOption = boolean | RegExp | string | (() => boolean);
-export type JarallaxMethodName =
-  | 'destroy'
-  | 'onResize'
-  | 'onScroll'
-  | 'isVisible'
-  | 'clipContainer'
-  | 'coverImage';
-export type JarallaxVoidMethodName = 'destroy' | 'onResize' | 'onScroll' | 'clipContainer';
+export type JarallaxMethodName = 'destroy' | 'onResize' | 'onScroll' | 'isVisible' | 'coverImage';
+export type JarallaxVoidMethodName = 'destroy' | 'onResize' | 'onScroll';
 export type JarallaxItem = HTMLElement & { jarallax?: JarallaxInstance };
 export type JarallaxItems = JarallaxItem | ArrayLike<JarallaxItem>;
 

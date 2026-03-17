@@ -41,7 +41,7 @@ beforeEach(() => {
 
 describe('jarallax React compatibility', () => {
   it('renders stable SSR markup without initializing DOM helpers', async () => {
-    const { Jarallax, JarallaxImage } = await import('../../src/react/index.ts');
+    const { Jarallax, JarallaxImage } = await import('../src/react/index.ts');
 
     const html = renderToString(
       React.createElement(
@@ -72,7 +72,7 @@ describe('jarallax React compatibility', () => {
   });
 
   it('hydrates into exactly one Jarallax instance', async () => {
-    const { Jarallax, JarallaxImage } = await import('../../src/react/index.ts');
+    const { Jarallax, JarallaxImage } = await import('../src/react/index.ts');
     const host = createHost();
     const element = React.createElement(
       Jarallax,
@@ -119,7 +119,7 @@ describe('jarallax React compatibility', () => {
 
     vi.stubGlobal('IntersectionObserver', TrackingIntersectionObserver);
 
-    const { Jarallax } = await import('../../src/react/index.ts');
+    const { Jarallax } = await import('../src/react/index.ts');
     const host = createHost();
     const root = createRoot(host);
 
@@ -156,7 +156,7 @@ describe('jarallax React compatibility', () => {
   });
 
   it('reuses the instance when effective options are unchanged and reinitializes when they change', async () => {
-    const { Jarallax } = await import('../../src/react/index.ts');
+    const { Jarallax } = await import('../src/react/index.ts');
     const host = createHost();
     const root = createRoot(host);
 
@@ -225,7 +225,7 @@ describe('jarallax React compatibility', () => {
   });
 
   it('initializes video mode after client mount', async () => {
-    const { JarallaxVideo } = await import('../../src/react/index.ts');
+    const { JarallaxVideo } = await import('../src/react/index.ts');
     const host = createHost();
     const root = createRoot(host);
 

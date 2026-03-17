@@ -1,20 +1,20 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { createJarallaxBlock } from './helpers.js';
+import { createJarallaxBlock } from './test-helpers.js';
 
-describe('jarallax jQuery compatibility', () => {
+describe('jarallax jQuery plugin', () => {
   beforeEach(() => {
     vi.resetModules();
   });
 
   it('registers $.fn.jarallax in the UMD entry', async () => {
-    await import('../../src/core.umd.ts');
+    await import('../src/core.umd.ts');
 
     expect(window.jQuery.fn.jarallax).toBeTypeOf('function');
     expect(window.jQuery.fn.jarallax.noConflict).toBeTypeOf('function');
   });
 
   it('initializes and destroys through the jQuery plugin API', async () => {
-    await import('../../src/core.umd.ts');
+    await import('../src/core.umd.ts');
 
     const block = createJarallaxBlock({ mode: 'img' });
     const $block = window.jQuery(block);
@@ -35,7 +35,7 @@ describe('jarallax jQuery compatibility', () => {
     const previousPlugin = () => 'previous';
     window.jQuery.fn.jarallax = previousPlugin;
 
-    await import('../../src/core.umd.ts');
+    await import('../src/core.umd.ts');
 
     const plugin = window.jQuery.fn.jarallax.noConflict();
 
