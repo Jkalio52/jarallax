@@ -5,10 +5,9 @@ import jarallaxElement from './ext-element';
 
 jarallaxElement();
 
-// data-jarallax-element initialization
 domReady(() => {
   if (typeof global.jarallax !== 'undefined') {
-    global.jarallax(document.querySelectorAll('[data-jarallax-element]'));
+    global.jarallax(document.querySelectorAll('[data-jarallax-element]') as never);
   }
 });
 

@@ -7,8 +7,8 @@ describe('jarallax video URL compatibility', () => {
   });
 
   it('parses the legacy set of supported video URLs', async () => {
-    const { default: jarallax } = await import('../../src/core.js');
-    const { default: jarallaxVideo } = await import('../../src/ext-video.js');
+    const { default: jarallax } = await import('../../src/core.ts');
+    const { default: jarallaxVideo } = await import('../../src/ext-video.ts');
     const block = createJarallaxBlock({ mode: 'img' });
 
     jarallaxVideo(jarallax);

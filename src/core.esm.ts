@@ -4,10 +4,10 @@ import jarallaxElementExt from './deprecated/ext-element';
 
 export const jarallax = jarallaxLib;
 
-export const jarallaxVideo = function jarallaxVideo() {
+export const jarallaxVideo = function jarallaxVideo(): void {
   return jarallaxVideoExt(jarallax);
 };
 
-export const jarallaxElement = function jarallaxElement() {
+export const jarallaxElement = function jarallaxElement(): void {
   return jarallaxElementExt(jarallax);
 };

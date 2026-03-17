@@ -2,7 +2,7 @@
  * Document ready callback.
  * @param {Function} callback - callback will be fired once Document ready.
  */
-function ready(callback) {
+export default function ready(callback: () => void): void {
   if (document.readyState === 'complete' || document.readyState === 'interactive') {
     // Already ready or interactive, execute callback
     callback();
@@ -14,5 +14,3 @@ function ready(callback) {
     });
   }
 }
-
-export default ready;

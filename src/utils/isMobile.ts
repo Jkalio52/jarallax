@@ -1,11 +1,9 @@
 import global from './global';
 
-const { navigator } = global;
-
 const mobileAgent = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-  navigator.userAgent
+  global.navigator?.userAgent ?? ''
 );
 
-export default function isMobile() {
+export default function isMobile(): boolean {
   return mobileAgent;
 }

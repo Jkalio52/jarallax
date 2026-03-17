@@ -42,10 +42,10 @@ function getElementHeader() {
 `;
 }
 
-const pathCore = './src/core.esm.js';
-const pathCoreUmd = './src/core.umd.js';
-const pathExtVideoUmd = './src/ext-video.umd.js';
-const pathExtElementUmd = './src/deprecated/ext-element.umd.js';
+const pathCore = './src/core.esm.ts';
+const pathCoreUmd = './src/core.umd.ts';
+const pathExtVideoUmd = './src/ext-video.umd.ts';
+const pathExtElementUmd = './src/deprecated/ext-element.umd.ts';
 
 const bundles = [
   // Core.
@@ -147,9 +147,13 @@ const configs = bundles.map(({ input: inputPath, output }) => ({
   input: inputPath,
   output,
   plugins: [
-    nodeResolve(),
+    nodeResolve({
+      extensions: ['.mjs', '.js', '.json', '.node', '.ts'],
+    }),
     babel({
+      extensions: ['.js', '.ts'],
       babelHelpers: 'bundled',
+      presets: ['@babel/preset-typescript'],
       plugins: ['annotate-pure-calls'],
     }),
     replace({

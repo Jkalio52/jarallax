@@ -1,5 +1,6 @@
-export default {
-  // Base parallax options.
+import type { JarallaxOptions } from './types';
+
+const defaults: JarallaxOptions = {
   type: 'scroll',
   speed: 0.5,
   containerClass: 'jarallax-container',
@@ -12,14 +13,10 @@ export default {
   elementInViewport: null,
   zIndex: -100,
   disableParallax: false,
-
-  // Callbacks.
   onScroll: null,
   onInit: null,
   onDestroy: null,
   onCoverImage: null,
-
-  // Video options.
   videoClass: 'jarallax-video',
   videoSrc: null,
   videoStartTime: 0,
@@ -29,8 +26,8 @@ export default {
   videoPlayOnlyVisible: true,
   videoLazyLoading: true,
   disableVideo: false,
-
-  // Video callbacks.
   onVideoInsert: null,
   onVideoWorkerInit: null,
 };
+
+export default defaults;

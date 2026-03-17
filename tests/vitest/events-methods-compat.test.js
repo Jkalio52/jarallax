@@ -7,7 +7,7 @@ describe('jarallax events and method compatibility', () => {
   });
 
   it('fires lifecycle events and passes scroll calculations during init', async () => {
-    const { default: jarallax } = await import('../../src/core.js');
+    const { default: jarallax } = await import('../../src/core.ts');
     const block = createJarallaxBlock({ mode: 'img' });
     const onScroll = vi.fn();
     const onInit = vi.fn();
@@ -42,7 +42,7 @@ describe('jarallax events and method compatibility', () => {
   });
 
   it('keeps instance css and extend helpers callable', async () => {
-    const { default: jarallax } = await import('../../src/core.js');
+    const { default: jarallax } = await import('../../src/core.ts');
     const block = createJarallaxBlock({ mode: 'background' });
     const probe = document.createElement('div');
 
@@ -81,7 +81,7 @@ describe('jarallax events and method compatibility', () => {
   });
 
   it('dispatches the public isVisible method through the root API', async () => {
-    const { default: jarallax } = await import('../../src/core.js');
+    const { default: jarallax } = await import('../../src/core.ts');
     const block = createJarallaxBlock({ mode: 'background' });
 
     jarallax(block);
