@@ -350,7 +350,7 @@ class Jarallax {
       if (!originalStylesImgTag) {
         self.image.$item.removeAttribute('style');
       } else {
-        self.image.$item.setAttribute('style', originalStylesTag);
+        self.image.$item.setAttribute('style', originalStylesImgTag);
       }
 
       // move img tag to its default position

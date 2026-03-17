@@ -18,6 +18,10 @@
   "scripts": {
     "dev": "cross-env NODE_ENV=dev rollup --config --sourcemap --watch",
     "build": "rollup --config --sourcemap",
+    "test": "vitest",
+    "test:run": "vitest run",
+    "test:artifacts": "vitest run tests/vitest/build-artifacts.test.js",
+    "test:coverage": "vitest run --coverage",
     "js-lint": "eslint src/ tests/",
     "js-lint-fix": "eslint --fix src/ tests/",
     "prepare": "husky install"
@@ -43,6 +47,7 @@
     "@rollup/plugin-replace": "^5.0.2",
     "@rollup/plugin-terser": "^0.4.3",
     "@types/jquery": "^3.5.17",
+    "@vitest/coverage-v8": "^4.1.0",
     "babel-plugin-annotate-pure-calls": "^0.4.0",
     "browserslist-config-nk": "^1.1.1",
     "clean-css": "^5.3.2",
@@ -50,13 +55,15 @@
     "eslint-config-nk": "^1.2.0",
     "husky": "^8.0.3",
     "jquery": "^3.7.1",
+    "jsdom": "^27.4.0",
     "json-file": "^0.1.0",
     "lint-staged": "^13.2.0",
     "micromatch": "^4.0.5",
     "prettier-config-nk": "^1.1.1",
     "rollup": "^3.28.1",
     "rollup-plugin-copy": "^3.4.0",
-    "rollup-plugin-serve": "^2.0.2"
+    "rollup-plugin-serve": "^2.0.2",
+    "vitest": "^4.1.0"
   },
   "dependencies": {
     "video-worker": "^2.2.0"
