@@ -1036,8 +1036,6 @@
     }
   }
 
-  /* eslint-disable import/no-mutable-exports */
-  /* eslint-disable no-restricted-globals */
   let win;
   if (typeof window !== 'undefined') {
     win = window;
@@ -1055,262 +1053,231 @@
       return;
     }
     const Jarallax = jarallax.constructor;
-
-    // append video after when block will be visible.
     const defOnScroll = Jarallax.prototype.onScroll;
-    Jarallax.prototype.onScroll = function () {
-      const self = this;
-      defOnScroll.apply(self);
-      const isReady = !self.isVideoInserted && self.video && (!self.options.videoLazyLoading || self.isElementInViewport) && !self.options.disableVideo();
-      if (isReady) {
-        self.isVideoInserted = true;
-        self.video.getVideo(video => {
-          const $parent = video.parentNode;
-          self.css(video, {
-            position: self.image.position,
-            top: '0px',
-            left: '0px',
-            right: '0px',
-            bottom: '0px',
-            width: '100%',
-            height: '100%',
-            maxWidth: 'none',
-            maxHeight: 'none',
-            pointerEvents: 'none',
-            transformStyle: 'preserve-3d',
-            backfaceVisibility: 'hidden',
-            margin: 0,
-            zIndex: -1
-          });
-          self.$video = video;
 
-          // add Poster attribute to self-hosted video
-          if (self.video.type === 'local') {
-            if (self.image.src) {
-              self.$video.setAttribute('poster', self.image.src);
-            } else if (self.image.$item && self.image.$item.tagName === 'IMG' && self.image.$item.src) {
-              self.$video.setAttribute('poster', self.image.$item.src);
-            }
-          }
-
-          // add classname to video element
-          if (self.options.videoClass) {
-            self.$video.setAttribute('class', `${self.options.videoClass} ${self.options.videoClass}-${self.video.type}`);
-          }
-
-          // insert video tag
-          self.image.$container.appendChild(video);
-
-          // remove parent video element (created by VideoWorker)
-          $parent.parentNode.removeChild($parent);
-
-          // call onVideoInsert event
-          if (self.options.onVideoInsert) {
-            self.options.onVideoInsert.call(self);
-          }
-        });
+    // Video DOM is inserted lazily once the instance becomes eligible, which preserves the old lazy-loading behavior.
+    Jarallax.prototype.onScroll = function onScrollWithVideo() {
+      defOnScroll.apply(this);
+      const isReady = !this.isVideoInserted && this.video && (!this.options.videoLazyLoading || this.isElementInViewport) && !this.options.disableVideo();
+      if (!isReady) {
+        return;
       }
+      this.isVideoInserted = true;
+      this.video.getVideo(video => {
+        const insertedVideo = video;
+        const parent = insertedVideo.parentNode;
+        this.css(insertedVideo, {
+          position: this.image.position,
+          top: '0px',
+          left: '0px',
+          right: '0px',
+          bottom: '0px',
+          width: '100%',
+          height: '100%',
+          maxWidth: 'none',
+          maxHeight: 'none',
+          pointerEvents: 'none',
+          transformStyle: 'preserve-3d',
+          backfaceVisibility: 'hidden',
+          margin: 0,
+          zIndex: -1
+        });
+        this.$video = insertedVideo;
+
+        // Self-hosted video should keep using the image as a poster, just like the legacy extension did.
+        if (this.video?.type === 'local') {
+          if (this.image.src) {
+            insertedVideo.setAttribute('poster', this.image.src);
+          } else if (this.image.$item?.tagName === 'IMG') {
+            insertedVideo.setAttribute('poster', this.image.$item.src);
+          }
+        }
+        if (this.options.videoClass) {
+          insertedVideo.setAttribute('class', `${this.options.videoClass} ${this.options.videoClass}-${this.video?.type}`);
+        }
+        this.image.$container?.appendChild(insertedVideo);
+        parent?.parentNode?.removeChild(parent);
+        this.options.onVideoInsert?.call(this);
+      });
     };
-
-    // cover video
     const defCoverImage = Jarallax.prototype.coverImage;
-    Jarallax.prototype.coverImage = function () {
-      const self = this;
-      const imageData = defCoverImage.apply(self);
-      const node = self.image.$item ? self.image.$item.nodeName : false;
-      if (imageData && self.video && node && (node === 'IFRAME' || node === 'VIDEO')) {
-        let h = imageData.image.height;
-        let w = h * self.image.width / self.image.height;
-        let ml = (imageData.container.width - w) / 2;
-        let mt = imageData.image.marginTop;
-        if (imageData.container.width > w) {
-          w = imageData.container.width;
-          h = w * self.image.height / self.image.width;
-          ml = 0;
-          mt += (imageData.image.height - h) / 2;
-        }
 
-        // add video height over than need to hide controls
-        if (node === 'IFRAME') {
-          h += 400;
-          mt -= 200;
-        }
-        self.css(self.$video, {
-          width: `${w}px`,
-          marginLeft: `${ml}px`,
-          height: `${h}px`,
-          marginTop: `${mt}px`
-        });
+    // Reuse the core cover logic, then resize the actual video element to match the computed image box.
+    Jarallax.prototype.coverImage = function coverVideo() {
+      const imageData = defCoverImage.apply(this);
+      const node = this.image.$item?.nodeName;
+      if (!imageData || imageData === true || !this.video || !node || node !== 'IFRAME' && node !== 'VIDEO' || !this.$video) {
+        return imageData;
       }
+      let h = imageData.image.height;
+      let w = h * (this.image.width || 0) / (this.image.height || 1);
+      let ml = (imageData.container.width - w) / 2;
+      let mt = imageData.image.marginTop;
+      if (imageData.container.width > w) {
+        w = imageData.container.width;
+        h = w * (this.image.height || 0) / (this.image.width || 1);
+        ml = 0;
+        mt += (imageData.image.height - h) / 2;
+      }
+
+      // Iframes need extra vertical overscan to hide native player controls outside the visible crop.
+      if (node === 'IFRAME') {
+        h += 400;
+        mt -= 200;
+      }
+      this.css(this.$video, {
+        width: `${w}px`,
+        marginLeft: `${ml}px`,
+        height: `${h}px`,
+        marginTop: `${mt}px`
+      });
       return imageData;
     };
-
-    // init video
     const defInitImg = Jarallax.prototype.initImg;
-    Jarallax.prototype.initImg = function () {
-      const self = this;
-      const defaultResult = defInitImg.apply(self);
-      if (!self.options.videoSrc) {
-        self.options.videoSrc = self.$item.getAttribute('data-jarallax-video') || null;
+
+    // The video extension can bootstrap from `data-jarallax-video` even when no option object was passed in.
+    Jarallax.prototype.initImg = function initVideoImage() {
+      const defaultResult = defInitImg.apply(this);
+      if (!this.options.videoSrc) {
+        this.options.videoSrc = this.$item.getAttribute('data-jarallax-video') || null;
       }
-      if (self.options.videoSrc) {
-        self.defaultInitImgResult = defaultResult;
+      if (this.options.videoSrc) {
+        this.defaultInitImgResult = defaultResult;
         return true;
       }
       return defaultResult;
     };
     const defCanInitParallax = Jarallax.prototype.canInitParallax;
-    Jarallax.prototype.canInitParallax = function () {
-      const self = this;
-      let defaultResult = defCanInitParallax.apply(self);
-      if (!self.options.videoSrc) {
+
+    // Video setup happens inside canInitParallax() so the extension can decide between real parallax and static fallback.
+    Jarallax.prototype.canInitParallax = function canInitVideoParallax() {
+      let defaultResult = defCanInitParallax.apply(this);
+      if (!this.options.videoSrc) {
+        return defaultResult;
+      }
+      const video = new VideoWorker(this.options.videoSrc, {
+        autoplay: true,
+        loop: this.options.videoLoop,
+        showControls: false,
+        accessibilityHidden: true,
+        startTime: Number(this.options.videoStartTime || 0),
+        endTime: Number(this.options.videoEndTime || 0),
+        mute: !this.options.videoVolume,
+        volume: Number(this.options.videoVolume || 0)
+      });
+      this.options.onVideoWorkerInit?.call(this, video);
+      const resetDefaultImage = () => {
+        // Errors or completed non-looping videos fall back to the original image element.
+        if (this.image.$default_item) {
+          this.image.$item = this.image.$default_item;
+          this.image.$item.style.display = 'block';
+          this.coverImage();
+          this.onScroll();
+        }
+      };
+      if (!video.isValid()) {
         return defaultResult;
       }
 
-      // Init video api
-      const video = new VideoWorker(self.options.videoSrc, {
-        autoplay: true,
-        loop: self.options.videoLoop,
-        showControls: false,
-        accessibilityHidden: true,
-        startTime: self.options.videoStartTime || 0,
-        endTime: self.options.videoEndTime || 0,
-        mute: !self.options.videoVolume,
-        volume: self.options.videoVolume || 0
-      });
-
-      // call onVideoWorkerInit event
-      if (self.options.onVideoWorkerInit) {
-        self.options.onVideoWorkerInit.call(self, video);
+      // Video support must still work even when parallax is disabled on mobile/user-agent checks.
+      if (this.options.disableParallax()) {
+        defaultResult = true;
+        this.image.position = 'absolute';
+        this.options.type = 'scroll';
+        this.options.speed = 1;
       }
-      function resetDefaultImage() {
-        if (self.image.$default_item) {
-          self.image.$item = self.image.$default_item;
-          self.image.$item.style.display = 'block';
-
-          // set image width and height
-          self.coverImage();
-          self.onScroll();
-        }
-      }
-      if (video.isValid()) {
-        // Force enable parallax.
-        // When the parallax disabled on mobile devices, we still need to display videos.
-        // https://github.com/nk-o/jarallax/issues/159
-        if (this.options.disableParallax()) {
-          defaultResult = true;
-          self.image.position = 'absolute';
-          self.options.type = 'scroll';
-          self.options.speed = 1;
-        }
-
-        // if parallax will not be inited, we can add thumbnail on background.
-        if (!defaultResult) {
-          if (!self.defaultInitImgResult) {
-            video.getImageURL(url => {
-              // save default user styles
-              const curStyle = self.$item.getAttribute('style');
-              if (curStyle) {
-                self.$item.setAttribute('data-jarallax-original-styles', curStyle);
-              }
-
-              // set new background
-              self.css(self.$item, {
-                'background-image': `url("${url}")`,
-                'background-position': 'center',
-                'background-size': 'cover'
-              });
+      if (!defaultResult) {
+        // If the instance cannot initialize parallax, keep the historical behavior of swapping in a thumbnail background.
+        if (!this.defaultInitImgResult) {
+          video.getImageURL(url => {
+            const currentStyle = this.$item.getAttribute('style');
+            if (currentStyle) {
+              this.$item.setAttribute('data-jarallax-original-styles', currentStyle);
+            }
+            this.css(this.$item, {
+              backgroundImage: `url("${url}")`,
+              backgroundPosition: 'center',
+              backgroundSize: 'cover'
             });
-          }
-
-          // init video
+          });
+        }
+        return defaultResult;
+      }
+      video.on('ready', () => {
+        // Visibility-driven play/pause is applied by wrapping the existing onScroll implementation.
+        if (this.options.videoPlayOnlyVisible) {
+          const oldOnScroll = this.onScroll;
+          this.onScroll = function onScrollPlayVideo() {
+            oldOnScroll.apply(this);
+            if (!this.videoError && (this.options.videoLoop || !this.options.videoLoop && !this.videoEnded)) {
+              if (this.isVisible()) {
+                video.play();
+              } else {
+                video.pause();
+              }
+            }
+          };
         } else {
-          video.on('ready', () => {
-            if (self.options.videoPlayOnlyVisible) {
-              const oldOnScroll = self.onScroll;
-              self.onScroll = function () {
-                oldOnScroll.apply(self);
-                if (!self.videoError && (self.options.videoLoop || !self.options.videoLoop && !self.videoEnded)) {
-                  if (self.isVisible()) {
-                    video.play();
-                  } else {
-                    video.pause();
-                  }
-                }
-              };
-            } else {
-              video.play();
-            }
+          video.play();
+        }
+      });
+      video.on('started', () => {
+        // Once the real video starts, it becomes the active visual source used by core sizing logic.
+        this.image.$default_item = this.image.$item;
+        this.image.$item = this.$video;
+        this.image.width = this.video?.videoWidth || 1280;
+        this.image.height = this.video?.videoHeight || 720;
+        this.coverImage();
+        this.onScroll();
+        if (this.image.$default_item) {
+          this.image.$default_item.style.display = 'none';
+        }
+      });
+      video.on('ended', () => {
+        this.videoEnded = true;
+        if (!this.options.videoLoop) {
+          resetDefaultImage();
+        }
+      });
+      video.on('error', () => {
+        this.videoError = true;
+        resetDefaultImage();
+      });
+      this.video = video;
+      if (!this.defaultInitImgResult) {
+        // Remote providers need an async thumbnail first; local videos can initialize immediately.
+        this.image.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+        if (video.type !== 'local') {
+          video.getImageURL(url => {
+            this.image.bgImage = `url("${url}")`;
+            this.init();
           });
-          video.on('started', () => {
-            self.image.$default_item = self.image.$item;
-            self.image.$item = self.$video;
-
-            // set video width and height
-            self.image.width = self.video.videoWidth || 1280;
-            self.image.height = self.video.videoHeight || 720;
-            self.coverImage();
-            self.onScroll();
-
-            // hide image
-            if (self.image.$default_item) {
-              self.image.$default_item.style.display = 'none';
-            }
-          });
-          video.on('ended', () => {
-            self.videoEnded = true;
-            if (!self.options.videoLoop) {
-              // show default image if Loop disabled.
-              resetDefaultImage();
-            }
-          });
-          video.on('error', () => {
-            self.videoError = true;
-
-            // show default image if video loading error.
-            resetDefaultImage();
-          });
-          self.video = video;
-
-          // set image if not exists
-          if (!self.defaultInitImgResult) {
-            // set empty image on self-hosted video if not defined
-            self.image.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
-            if (video.type !== 'local') {
-              video.getImageURL(url => {
-                self.image.bgImage = `url("${url}")`;
-                self.init();
-              });
-              return false;
-            }
-          }
+          return false;
         }
       }
       return defaultResult;
     };
-
-    // Destroy video parallax
     const defDestroy = Jarallax.prototype.destroy;
-    Jarallax.prototype.destroy = function () {
-      const self = this;
-      if (self.image.$default_item) {
-        self.image.$item = self.image.$default_item;
-        delete self.image.$default_item;
+
+    // Restore the original image reference before core destroy() tears down the DOM.
+    Jarallax.prototype.destroy = function destroyVideo() {
+      if (this.image.$default_item) {
+        this.image.$item = this.image.$default_item;
+        delete this.image.$default_item;
       }
-      defDestroy.apply(self);
+      defDestroy.apply(this);
     };
   }
 
   jarallaxVideo();
-
-  // data-jarallax-video initialization
   ready(() => {
+    // Preserve the historical auto-init path for `[data-jarallax-video]` in script-tag usage.
     if (typeof global$1.jarallax !== 'undefined') {
       global$1.jarallax(document.querySelectorAll('[data-jarallax-video]'));
     }
   });
 
-  // We should add VideoWorker globally, since some project uses it.
+  // VideoWorker remains global because downstream projects have historically relied on that side effect.
   if (!global$1.VideoWorker) {
     global$1.VideoWorker = VideoWorker;
   }
