@@ -13,15 +13,42 @@
     <link href="https://cdn.jsdelivr.net/npm/jarallax@2/dist/jarallax.min.css" rel="stylesheet" />
   </head>
   <body>
-    <div class="section"><h1>HTML Example</h1></div>
+    <section class="section section-intro">
+      <div class="section-inner">
+        <p class="eyebrow">Jarallax</p>
+        <h1>HTML Example</h1>
+        <div class="lede">
+          A plain HTML setup using data attributes and the browser-ready CDN build.
+        </div>
+      </div>
+    </section>
 
     <div class="jarallax" data-jarallax>
-      <img class="jarallax-img" src="https://jarallax.nkdev.info/images/image1.jpg" alt="" />
+      <img class="jarallax-img" src="https://jarallax.nkdev.info/images/image-1.jpg" alt="" />
+      <div class="hero-content">
+        <p class="eyebrow">Image Parallax</p>
+        <h2>Data Attribute Example</h2>
+        <p class="hero-text">Add the `data-jarallax` attribute and keep the markup otherwise simple.</p>
+      </div>
     </div>
 
-    <div class="jarallax" data-jarallax data-video-src="https://youtu.be/mru3Q5m4lkY"></div>
+    <section class="section section-copy">
+      <div class="section-inner panel">
+        <p class="eyebrow">No JavaScript Setup</p>
+        <p>
+          This example shows the smallest HTML-first integration, with initialization coming from
+          the default data-attribute flow.
+        </p>
+      </div>
+    </section>
 
-    <div class="section"></div>
+    <div class="jarallax hero-video" data-jarallax data-video-src="https://youtu.be/mru3Q5m4lkY">
+      <div class="hero-content">
+        <p class="eyebrow">Video Parallax</p>
+        <h2>HTML Video Example</h2>
+        <p class="hero-text">The same structure also works when the background source is video.</p>
+      </div>
+    </div>
 
     <!-- Jarallax JS -->
     <script src="https://cdn.jsdelivr.net/npm/jarallax@2/dist/jarallax.min.js"></script>

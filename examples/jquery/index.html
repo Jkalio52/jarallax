@@ -13,15 +13,41 @@
     <link href="https://cdn.jsdelivr.net/npm/jarallax@2/dist/jarallax.min.css" rel="stylesheet" />
   </head>
   <body>
-    <div class="section"><h1>jQuery Example</h1></div>
+    <section class="section section-intro">
+      <div class="section-inner">
+        <p class="eyebrow">Jarallax</p>
+        <h1>jQuery Example</h1>
+        <div class="lede">
+          A small jQuery-based setup for legacy projects that still use the plugin entry.
+        </div>
+      </div>
+    </section>
 
     <div class="jarallax">
-      <img class="jarallax-img" src="https://jarallax.nkdev.info/images/image1.jpg" alt="" />
+      <img class="jarallax-img" src="https://jarallax.nkdev.info/images/image-1.jpg" alt="" />
+      <div class="hero-content">
+        <p class="eyebrow">Image Parallax</p>
+        <h2>jQuery Image Example</h2>
+        <p class="hero-text">Initialize Jarallax through the familiar jQuery plugin API.</p>
+      </div>
     </div>
 
-    <div class="jarallax" data-video-src="https://youtu.be/mru3Q5m4lkY"></div>
+    <section class="section section-copy">
+      <div class="section-inner panel">
+        <p class="eyebrow">Plugin API</p>
+        <p>
+          Keep the page markup simple, then initialize every matching block through `$('.jarallax').jarallax()`.
+        </p>
+      </div>
+    </section>
 
-    <div class="section"></div>
+    <div class="jarallax hero-video" data-video-src="https://youtu.be/mru3Q5m4lkY">
+      <div class="hero-content">
+        <p class="eyebrow">Video Parallax</p>
+        <h2>jQuery Video Example</h2>
+        <p class="hero-text">Video backgrounds stay on the same plugin initialization flow.</p>
+      </div>
+    </div>
 
     <!-- jQuery -->
     <script src="https://cdn.jsdelivr.net/npm/jquery"></script>
