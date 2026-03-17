@@ -9,5 +9,5 @@
     "outDir": "./dist/types",
     "rootDir": "."
   },
-  "include": ["src/**/*.ts", "src/**/*.d.ts", "typings/index.d.ts"]
+  "include": ["src/**/*.ts", "src/**/*.d.ts"]
 }

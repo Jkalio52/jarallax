@@ -24,6 +24,7 @@ export interface JarallaxWindowData {
 }
 export type DisableOption = boolean | RegExp | string | (() => boolean);
 export type JarallaxMethodName = 'destroy' | 'onResize' | 'onScroll' | 'isVisible' | 'clipContainer' | 'coverImage';
+export type JarallaxVoidMethodName = 'destroy' | 'onResize' | 'onScroll' | 'clipContainer';
 export type JarallaxItem = HTMLElement & {
     jarallax?: JarallaxInstance;
 };
@@ -148,7 +149,10 @@ export interface JarallaxConstructor {
     prototype: JarallaxInstance;
 }
 export interface JarallaxStatic {
-    (items: JarallaxItems, options?: JarallaxOptions, ...args: unknown[]): JarallaxItems | unknown;
+    (items: JarallaxItems, options?: JarallaxOptions): JarallaxItems;
+    (items: JarallaxItems, methodName: JarallaxVoidMethodName): void;
+    (items: JarallaxItems, methodName: 'isVisible'): boolean | undefined;
+    (items: JarallaxItems, methodName: 'coverImage'): JarallaxCoverImageData | true | void;
     constructor: JarallaxConstructor;
 }
 export type GlobalLike = typeof globalThis & {

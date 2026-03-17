@@ -36,6 +36,7 @@ export type JarallaxMethodName =
   | 'isVisible'
   | 'clipContainer'
   | 'coverImage';
+export type JarallaxVoidMethodName = 'destroy' | 'onResize' | 'onScroll' | 'clipContainer';
 export type JarallaxItem = HTMLElement & { jarallax?: JarallaxInstance };
 export type JarallaxItems = JarallaxItem | ArrayLike<JarallaxItem>;
 
@@ -171,7 +172,10 @@ export interface JarallaxConstructor {
 
 export interface JarallaxStatic {
   // The callable root export doubles as a namespace carrying the constructor reference for extensions.
-  (items: JarallaxItems, options?: JarallaxOptions, ...args: unknown[]): JarallaxItems | unknown;
+  (items: JarallaxItems, options?: JarallaxOptions): JarallaxItems;
+  (items: JarallaxItems, methodName: JarallaxVoidMethodName): void;
+  (items: JarallaxItems, methodName: 'isVisible'): boolean | undefined;
+  (items: JarallaxItems, methodName: 'coverImage'): JarallaxCoverImageData | true | void;
   constructor: JarallaxConstructor;
 }
 

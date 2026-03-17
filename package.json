@@ -9,7 +9,7 @@
   "module": "dist/jarallax.esm.js",
   "unpkg": "dist/jarallax.min.js",
   "style": "dist/jarallax.css",
-  "types": "./typings/index.d.ts",
+  "types": "./dist/types/src/public-api.d.ts",
   "files": [
     "src",
     "dist",
@@ -27,7 +27,7 @@
     "lint": "biome lint .",
     "lint:fix": "biome lint --write .",
     "format": "biome format --write .",
-    "format:check": "biome format .",
+    "format:check": "biome format --check .",
     "prepare": "husky install"
   },
   "repository": {

@@ -16,6 +16,6 @@
     "forceConsistentCasingInFileNames": true,
     "baseUrl": "."
   },
-  "include": ["src/**/*.js", "src/**/*.ts", "src/**/*.d.ts", "typings/index.d.ts"],
+  "include": ["src/**/*.js", "src/**/*.ts", "src/**/*.d.ts"],
   "exclude": ["dist", "node_modules", "coverage", "demo", "examples"]
 }

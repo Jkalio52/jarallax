@@ -16,7 +16,7 @@ describe('build artifact compatibility', () => {
     expect(pkg.module).toBe('dist/jarallax.esm.js');
     expect(pkg.unpkg).toBe('dist/jarallax.min.js');
     expect(pkg.style).toBe('dist/jarallax.css');
-    expect(pkg.types).toBe('./typings/index.d.ts');
+    expect(pkg.types).toBe('./dist/types/src/public-api.d.ts');
   });
 
   it('ships the required dist artifacts', () => {
@@ -32,6 +32,7 @@ describe('build artifact compatibility', () => {
       'dist/jarallax-video.min.js',
       'dist/jarallax-element.js',
       'dist/jarallax-element.min.js',
+      'dist/types/src/public-api.d.ts',
       'typings/index.d.ts',
     ];
 
@@ -119,5 +120,11 @@ describe('build artifact compatibility', () => {
 
     expect(css).toContain('.jarallax');
     expect(minifiedCss).toContain('.jarallax');
+  });
+
+  it('keeps the legacy typings entry as a compatibility re-export', () => {
+    const typingsEntry = fs.readFileSync(path.join(rootDir, 'typings/index.d.ts'), 'utf8');
+
+    expect(typingsEntry).toContain("export * from '../dist/types/src/public-api';");
   });
 });
