@@ -51,7 +51,7 @@
     "typecheck:build": "tsc -p tsconfig.build.json --pretty false",
     "test": "vitest",
     "test:run": "vitest run",
-    "test:artifacts": "vitest run tests/vitest/build-artifacts.test.js",
+    "test:artifacts": "vitest run tests/package-artifacts.test.js",
     "test:coverage": "vitest run --coverage",
     "lint": "biome lint .",
     "lint:fix": "biome lint --write .",

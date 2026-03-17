@@ -214,7 +214,8 @@ const canUseDOM = typeof document !== "undefined" && typeof Element !== "undefin
 let instanceID = 0;
 function resolveDisableOption(value) {
   if (typeof value === "string") {
-    value = new RegExp(value);
+    const regexpMatch = value.match(/^\/(.*)\/([dgimsuvy]*)$/);
+    value = regexpMatch ? new RegExp(regexpMatch[1], regexpMatch[2]) : new RegExp(value);
   }
   if (value instanceof RegExp) {
     const regexp = value;

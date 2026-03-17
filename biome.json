@@ -13,7 +13,7 @@
       "!examples/**/.next",
       "!examples/**/node_modules",
       "!examples/**/dist",
-      "tests/vitest/**/*.js",
+      "tests/**/*.js",
       "package.json",
       "tsconfig.json",
       "tsconfig.build.json",
