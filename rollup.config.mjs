@@ -14,7 +14,7 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 global['__filename'] = __filename;
 
-import data from './package.json' assert { type: 'json' };
+import data from './package.json' with { type: 'json' };
 
 const year = new Date().getFullYear();
 
