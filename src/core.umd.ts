@@ -6,7 +6,9 @@ import type { JarallaxItem } from './types';
 const $ = global.jQuery as
   | {
       fn: Record<string, unknown>;
-      (item: JarallaxItem): {
+      (
+        item: JarallaxItem
+      ): {
         jarallax?: unknown;
       };
     }

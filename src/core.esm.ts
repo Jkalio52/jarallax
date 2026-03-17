@@ -1,13 +1,13 @@
 import jarallaxLib from './core';
-import jarallaxVideoExt from './ext-video';
 import jarallaxElementExt from './deprecated/ext-element';
+import jarallaxVideoExt from './ext-video';
 
 export const jarallax = jarallaxLib;
 
 export const jarallaxVideo = function jarallaxVideo(): void {
-  return jarallaxVideoExt(jarallax);
+  jarallaxVideoExt(jarallax);
 };
 
 export const jarallaxElement = function jarallaxElement(): void {
-  return jarallaxElementExt(jarallax);
+  jarallaxElementExt(jarallax);
 };

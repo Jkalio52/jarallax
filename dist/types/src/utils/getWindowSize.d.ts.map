@@ -1,1 +1,1 @@
-{"version":3,"file":"getWindowSize.d.ts","sourceRoot":"","sources":["../../../../src/utils/getWindowSize.ts"],"names":[],"mappings":"AAuCA,MAAM,CAAC,OAAO,UAAU,aAAa,IAAI;IAAE,KAAK,EAAE,MAAM,CAAC;IAAC,MAAM,EAAE,MAAM,CAAA;CAAE,CAKzE"}
+{"version":3,"file":"getWindowSize.d.ts","sourceRoot":"","sources":["../../../../src/utils/getWindowSize.ts"],"names":[],"mappings":"AAwCA,MAAM,CAAC,OAAO,UAAU,aAAa,IAAI;IAAE,KAAK,EAAE,MAAM,CAAC;IAAC,MAAM,EAAE,MAAM,CAAA;CAAE,CAKzE"}

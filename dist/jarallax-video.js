@@ -27,14 +27,15 @@
     startTime: 0,
     endTime: 0
   };
+
   function extend(out, ...args) {
     const target = out || {};
-    Object.keys(args).forEach(index => {
+    Object.keys(args).forEach((index) => {
       const source = args[Number(index)];
       if (!source) {
         return;
       }
-      Object.keys(source).forEach(key => {
+      Object.keys(source).forEach((key) => {
         const typedKey = key;
         const value = source[typedKey];
         if (typeof value !== "undefined") {
@@ -44,18 +45,15 @@
     });
     return target;
   }
+
   let ID = 0;
   class VideoWorkerBase {
     constructor(url, options) {
       this.type = "none";
       this.destroyed = false;
       this.url = url;
-      this.options_default = {
-        ...defaults
-      };
-      this.options = extend({
-        ...this.options_default
-      }, options);
+      this.options_default = { ...defaults };
+      this.options = extend({ ...this.options_default }, options);
       this.videoID = this.constructor.parseURL(url);
       if (this.videoID) {
         this.init();
@@ -97,7 +95,7 @@
     }
     fire(name, ...args) {
       if (this.userEventsList && typeof this.userEventsList[name] !== "undefined") {
-        this.userEventsList[name].forEach(value => {
+        this.userEventsList[name].forEach((value) => {
           if (value) {
             value.apply(this, args);
           }
@@ -110,17 +108,28 @@
     static parseURL(_url) {
       return false;
     }
-    play(_start) {}
-    pause() {}
-    mute() {}
-    unmute() {}
-    setVolume(_volume = false) {}
-    getVolume(_callback) {}
-    getMuted(_callback) {}
-    setCurrentTime(_currentTime = false) {}
-    getCurrentTime(_callback) {}
-    getImageURL(_callback) {}
-    getVideo(_callback) {}
+    play(_start) {
+    }
+    pause() {
+    }
+    mute() {
+    }
+    unmute() {
+    }
+    setVolume(_volume = false) {
+    }
+    getVolume(_callback) {
+    }
+    getMuted(_callback) {
+    }
+    setCurrentTime(_currentTime = false) {
+    }
+    getCurrentTime(_callback) {
+    }
+    getImageURL(_callback) {
+    }
+    getVideo(_callback) {
+    }
     destroy() {
       var _a, _b;
       this.destroyed = true;
@@ -136,6 +145,7 @@
       this.hiddenContainer = void 0;
     }
   }
+
   class VideoWorkerLocal extends VideoWorkerBase {
     constructor() {
       super(...arguments);
@@ -145,7 +155,7 @@
       const videoFormats = url.split(/,(?=mp4:|webm:|ogv:|ogg:)/);
       const result = {};
       let ready = 0;
-      videoFormats.forEach(value => {
+      videoFormats.forEach((value) => {
         const match = value.match(/^(mp4|webm|ogv|ogg):(.*)/);
         if ((match == null ? void 0 : match[1]) && match[2]) {
           const key = match[1] === "ogv" ? "ogg" : match[1];
@@ -164,7 +174,7 @@
       }
       if (this.player.paused) {
         if (this.options.endTime && !this.options.loop) {
-          this.getCurrentTime(seconds => {
+          this.getCurrentTime((seconds) => {
             var _a;
             if (seconds < this.options.endTime) {
               void ((_a = this.player) == null ? void 0 : _a.play());
@@ -274,7 +284,7 @@
         this.$video.setAttribute("id", this.playerID);
         hiddenDiv.appendChild(this.$video);
         document.body.appendChild(hiddenDiv);
-        Object.keys(this.videoID).forEach(key => {
+        Object.keys(this.videoID).forEach((key) => {
           const sourceValue = this.videoID[key];
           if (sourceValue) {
             addSourceElement(this.$video, sourceValue, `video/${key}`);
@@ -283,13 +293,13 @@
         const player = this.player;
         let localStarted = false;
         this.eventHandlers = {
-          playing: event => {
+          playing: (event) => {
             if (!localStarted) {
               this.fire("started", event);
             }
             localStarted = true;
           },
-          timeupdate: event => {
+          timeupdate: (event) => {
             this.fire("timeupdate", event);
             if (this.options.endTime && this.player && this.player.currentTime >= this.options.endTime) {
               if (this.options.loop) {
@@ -299,16 +309,16 @@
               }
             }
           },
-          play: event => {
+          play: (event) => {
             this.fire("play", event);
           },
-          pause: event => {
+          pause: (event) => {
             this.fire("pause", event);
           },
-          ended: event => {
+          ended: (event) => {
             this.fire("ended", event);
           },
-          loadedmetadata: event => {
+          loadedmetadata: (event) => {
             if (!this.player) {
               return;
             }
@@ -319,15 +329,15 @@
               this.play(this.options.startTime);
             }
           },
-          volumechange: event => {
-            this.getVolume(volume => {
+          volumechange: (event) => {
+            this.getVolume((volume) => {
               if (typeof volume === "number") {
                 this.options.volume = volume;
               }
             });
             this.fire("volumechange", event);
           },
-          error: event => {
+          error: (event) => {
             this.fire("error", event);
           }
         };
@@ -357,6 +367,7 @@
       super.destroy();
     }
   }
+
   class Deferred {
     constructor() {
       this.doneCallbacks = [];
@@ -382,6 +393,7 @@
       this.failCallbacks.push(callback);
     }
   }
+
   let win$1;
   if (typeof window !== "undefined") {
     win$1 = window;
@@ -391,9 +403,10 @@
     win$1 = globalThis;
   }
   var global$2 = win$1;
+
   let VimeoAPIadded = 0;
   let loadingVimeoPlayer = 0;
-  const loadingVimeoDefer = /*#__PURE__*/new Deferred();
+  const loadingVimeoDefer = new Deferred();
   const videoGlobal$1 = global$2;
   function loadAPI$1() {
     if (VimeoAPIadded) {
@@ -460,11 +473,11 @@
       if (typeof start !== "undefined") {
         void this.player.setCurrentTime(start);
       }
-      this.player.getPaused().then(paused => {
+      this.player.getPaused().then((paused) => {
         var _a;
         if (paused) {
           if (this.options.endTime && !this.options.loop) {
-            this.getCurrentTime(seconds => {
+            this.getCurrentTime((seconds) => {
               var _a2;
               if (seconds < this.options.endTime) {
                 void ((_a2 = this.player) == null ? void 0 : _a2.play());
@@ -480,7 +493,7 @@
       if (!this.player) {
         return;
       }
-      this.player.getPaused().then(paused => {
+      this.player.getPaused().then((paused) => {
         var _a;
         if (!paused) {
           void ((_a = this.player) == null ? void 0 : _a.pause());
@@ -511,7 +524,7 @@
         return;
       }
       if (this.player.getVolume) {
-        this.player.getVolume().then(volume => {
+        this.player.getVolume().then((volume) => {
           callback(volume * 100);
         });
       }
@@ -522,7 +535,7 @@
         return;
       }
       if (this.player.getVolume) {
-        this.player.getVolume().then(volume => {
+        this.player.getVolume().then((volume) => {
           callback(volume === 0);
         });
       }
@@ -537,7 +550,7 @@
       if (!this.player || !this.player.getCurrentTime) {
         return;
       }
-      this.player.getCurrentTime().then(currentTime => {
+      this.player.getCurrentTime().then((currentTime) => {
         callback(currentTime);
       });
     }
@@ -613,7 +626,7 @@
         if (!this.$video && hiddenDiv) {
           this.hiddenContainer = hiddenDiv;
           let playerOptionsString = "";
-          Object.keys(this.playerOptions).forEach(key => {
+          Object.keys(this.playerOptions).forEach((key) => {
             var _a;
             const optionKey = key;
             const value = (_a = this.playerOptions) == null ? void 0 : _a[optionKey];
@@ -627,7 +640,10 @@
           });
           this.$video = document.createElement("iframe");
           this.$video.setAttribute("id", this.playerID);
-          this.$video.setAttribute("src", `https://player.vimeo.com/video/${String(this.videoID)}?${playerOptionsString}`);
+          this.$video.setAttribute(
+            "src",
+            `https://player.vimeo.com/video/${String(this.videoID)}?${playerOptionsString}`
+          );
           this.$video.setAttribute("frameborder", "0");
           this.$video.setAttribute("mozallowfullscreen", "");
           this.$video.setAttribute("allowfullscreen", "");
@@ -639,21 +655,24 @@
           hiddenDiv.appendChild(this.$video);
           document.body.appendChild(hiddenDiv);
         }
-        this.player = this.player || new videoGlobal$1.Vimeo.Player(this.$video, this.playerOptions);
+        this.player = this.player || new videoGlobal$1.Vimeo.Player(
+          this.$video,
+          this.playerOptions
+        );
         if (!this.options.mute && typeof this.options.volume === "number") {
           this.setVolume(this.options.volume);
         }
         if (this.options.startTime && this.options.autoplay) {
           void this.player.setCurrentTime(this.options.startTime);
         }
-        this.player.getVideoWidth().then(widthValue => {
+        this.player.getVideoWidth().then((widthValue) => {
           this.videoWidth = widthValue || 1280;
         });
-        this.player.getVideoHeight().then(heightValue => {
+        this.player.getVideoHeight().then((heightValue) => {
           this.videoHeight = heightValue || 720;
         });
         let vmStarted = false;
-        this.player.on("timeupdate", event => {
+        this.player.on("timeupdate", (event) => {
           if (!vmStarted) {
             this.fire("started", event);
             vmStarted = true;
@@ -667,30 +686,30 @@
             }
           }
         });
-        this.player.on("play", event => {
+        this.player.on("play", (event) => {
           this.fire("play", event);
           if (this.options.startTime && event.seconds === 0) {
             this.play(this.options.startTime);
           }
         });
-        this.player.on("pause", event => {
+        this.player.on("pause", (event) => {
           this.fire("pause", event);
         });
-        this.player.on("ended", event => {
+        this.player.on("ended", (event) => {
           this.fire("ended", event);
         });
-        this.player.on("loaded", event => {
+        this.player.on("loaded", (event) => {
           this.fire("ready", event);
         });
-        this.player.on("volumechange", event => {
-          this.getVolume(volume => {
+        this.player.on("volumechange", (event) => {
+          this.getVolume((volume) => {
             if (typeof volume === "number") {
               this.options.volume = volume;
             }
           });
           this.fire("volumechange", event);
         });
-        this.player.on("error", event => {
+        this.player.on("error", (event) => {
           this.fire("error", event);
         });
         callback(this.$video);
@@ -708,9 +727,10 @@
       super.destroy();
     }
   }
+
   let YoutubeAPIadded = 0;
   let loadingYoutubePlayer = 0;
-  const loadingYoutubeDefer = /*#__PURE__*/new Deferred();
+  const loadingYoutubeDefer = new Deferred();
   const videoGlobal = global$2;
   function loadAPI() {
     if (YoutubeAPIadded) {
@@ -767,7 +787,7 @@
       }
       if (videoGlobal.YT.PlayerState.PLAYING !== this.player.getPlayerState()) {
         if (this.options.endTime && !this.options.loop) {
-          this.getCurrentTime(seconds => {
+          this.getCurrentTime((seconds) => {
             var _a;
             if (seconds < this.options.endTime) {
               (_a = this.player) == null ? void 0 : _a.playVideo();
@@ -882,7 +902,7 @@
             playsinline: 1
           },
           events: {
-            onReady: event => {
+            onReady: (event) => {
               if (this.options.mute) {
                 event.target.mute();
               } else if (typeof this.options.volume === "number") {
@@ -900,7 +920,7 @@
                 clearInterval(this.volumeChangeInterval);
               }
               this.volumeChangeInterval = setInterval(() => {
-                this.getVolume(volume => {
+                this.getVolume((volume) => {
                   if (typeof volume === "number" && this.options.volume !== volume) {
                     this.options.volume = volume;
                     this.fire("volumechange", event);
@@ -908,8 +928,9 @@
                 });
               }, 150);
             },
-            onStateChange: () => {},
-            onError: event => {
+            onStateChange: () => {
+            },
+            onError: (event) => {
               this.fire("error", event);
             }
           }
@@ -922,7 +943,7 @@
           this.playerOptions.playerVars.disablekb = 1;
         }
         let ytStarted = false;
-        this.playerOptions.events.onStateChange = event => {
+        this.playerOptions.events.onStateChange = (event) => {
           if (!videoGlobal.YT || !this.player) {
             return;
           }
@@ -1003,9 +1024,10 @@
       super.destroy();
     }
   }
-  const VideoWorker = function (url, options) {
+
+  const VideoWorker = function(url, options) {
     let result = false;
-    Object.keys(VideoWorker.providers).forEach(key => {
+    Object.keys(VideoWorker.providers).forEach((key) => {
       if (!result && VideoWorker.providers[key].parseURL(url)) {
         result = new VideoWorker.providers[key](url, options);
       }
@@ -1019,16 +1041,11 @@
     Local: VideoWorkerLocal
   };
 
-  /**
-   * Document ready callback.
-   * @param {Function} callback - callback will be fired once Document ready.
-   */
   function ready(callback) {
-    if (document.readyState === 'complete' || document.readyState === 'interactive') {
-      // Already ready or interactive, execute callback
+    if (document.readyState === "complete" || document.readyState === "interactive") {
       callback();
     } else {
-      document.addEventListener('DOMContentLoaded', callback, {
+      document.addEventListener("DOMContentLoaded", callback, {
         capture: true,
         once: true,
         passive: true
@@ -1037,11 +1054,11 @@
   }
 
   let win;
-  if (typeof window !== 'undefined') {
+  if (typeof window !== "undefined") {
     win = window;
-  } else if (typeof global !== 'undefined') {
+  } else if (typeof global !== "undefined") {
     win = global;
-  } else if (typeof self !== 'undefined') {
+  } else if (typeof self !== "undefined") {
     win = self;
   } else {
     win = {};
@@ -1049,13 +1066,11 @@
   var global$1 = win;
 
   function jarallaxVideo(jarallax = global$1.jarallax) {
-    if (typeof jarallax === 'undefined') {
+    if (typeof jarallax === "undefined") {
       return;
     }
     const Jarallax = jarallax.constructor;
     const defOnScroll = Jarallax.prototype.onScroll;
-
-    // Video DOM is inserted lazily once the instance becomes eligible, which preserves the old lazy-loading behavior.
     Jarallax.prototype.onScroll = function onScrollWithVideo() {
       defOnScroll.apply(this);
       const isReady = !this.isVideoInserted && this.video && (!this.options.videoLazyLoading || this.isElementInViewport) && !this.options.disableVideo();
@@ -1063,37 +1078,38 @@
         return;
       }
       this.isVideoInserted = true;
-      this.video.getVideo(video => {
+      this.video?.getVideo((video) => {
         const insertedVideo = video;
         const parent = insertedVideo.parentNode;
         this.css(insertedVideo, {
           position: this.image.position,
-          top: '0px',
-          left: '0px',
-          right: '0px',
-          bottom: '0px',
-          width: '100%',
-          height: '100%',
-          maxWidth: 'none',
-          maxHeight: 'none',
-          pointerEvents: 'none',
-          transformStyle: 'preserve-3d',
-          backfaceVisibility: 'hidden',
+          top: "0px",
+          left: "0px",
+          right: "0px",
+          bottom: "0px",
+          width: "100%",
+          height: "100%",
+          maxWidth: "none",
+          maxHeight: "none",
+          pointerEvents: "none",
+          transformStyle: "preserve-3d",
+          backfaceVisibility: "hidden",
           margin: 0,
           zIndex: -1
         });
         this.$video = insertedVideo;
-
-        // Self-hosted video should keep using the image as a poster, just like the legacy extension did.
-        if (this.video?.type === 'local') {
+        if (this.video?.type === "local") {
           if (this.image.src) {
-            insertedVideo.setAttribute('poster', this.image.src);
-          } else if (this.image.$item?.tagName === 'IMG') {
-            insertedVideo.setAttribute('poster', this.image.$item.src);
+            insertedVideo.setAttribute("poster", this.image.src);
+          } else if (this.image.$item?.tagName === "IMG") {
+            insertedVideo.setAttribute("poster", this.image.$item.src);
           }
         }
         if (this.options.videoClass) {
-          insertedVideo.setAttribute('class', `${this.options.videoClass} ${this.options.videoClass}-${this.video?.type}`);
+          insertedVideo.setAttribute(
+            "class",
+            `${this.options.videoClass} ${this.options.videoClass}-${this.video?.type}`
+          );
         }
         this.image.$container?.appendChild(insertedVideo);
         parent?.parentNode?.removeChild(parent);
@@ -1101,12 +1117,10 @@
       });
     };
     const defCoverImage = Jarallax.prototype.coverImage;
-
-    // Reuse the core cover logic, then resize the actual video element to match the computed image box.
     Jarallax.prototype.coverImage = function coverVideo() {
       const imageData = defCoverImage.apply(this);
       const node = this.image.$item?.nodeName;
-      if (!imageData || imageData === true || !this.video || !node || node !== 'IFRAME' && node !== 'VIDEO' || !this.$video) {
+      if (!imageData || imageData === true || !this.video || !node || node !== "IFRAME" && node !== "VIDEO" || !this.$video) {
         return imageData;
       }
       let h = imageData.image.height;
@@ -1119,9 +1133,7 @@
         ml = 0;
         mt += (imageData.image.height - h) / 2;
       }
-
-      // Iframes need extra vertical overscan to hide native player controls outside the visible crop.
-      if (node === 'IFRAME') {
+      if (node === "IFRAME") {
         h += 400;
         mt -= 200;
       }
@@ -1134,12 +1146,10 @@
       return imageData;
     };
     const defInitImg = Jarallax.prototype.initImg;
-
-    // The video extension can bootstrap from `data-jarallax-video` even when no option object was passed in.
     Jarallax.prototype.initImg = function initVideoImage() {
       const defaultResult = defInitImg.apply(this);
       if (!this.options.videoSrc) {
-        this.options.videoSrc = this.$item.getAttribute('data-jarallax-video') || null;
+        this.options.videoSrc = this.$item.getAttribute("data-jarallax-video") || null;
       }
       if (this.options.videoSrc) {
         this.defaultInitImgResult = defaultResult;
@@ -1148,8 +1158,6 @@
       return defaultResult;
     };
     const defCanInitParallax = Jarallax.prototype.canInitParallax;
-
-    // Video setup happens inside canInitParallax() so the extension can decide between real parallax and static fallback.
     Jarallax.prototype.canInitParallax = function canInitVideoParallax() {
       let defaultResult = defCanInitParallax.apply(this);
       if (!this.options.videoSrc) {
@@ -1167,10 +1175,9 @@
       });
       this.options.onVideoWorkerInit?.call(this, video);
       const resetDefaultImage = () => {
-        // Errors or completed non-looping videos fall back to the original image element.
         if (this.image.$default_item) {
           this.image.$item = this.image.$default_item;
-          this.image.$item.style.display = 'block';
+          this.image.$item.style.display = "block";
           this.coverImage();
           this.onScroll();
         }
@@ -1178,33 +1185,29 @@
       if (!video.isValid()) {
         return defaultResult;
       }
-
-      // Video support must still work even when parallax is disabled on mobile/user-agent checks.
       if (this.options.disableParallax()) {
         defaultResult = true;
-        this.image.position = 'absolute';
-        this.options.type = 'scroll';
+        this.image.position = "absolute";
+        this.options.type = "scroll";
         this.options.speed = 1;
       }
       if (!defaultResult) {
-        // If the instance cannot initialize parallax, keep the historical behavior of swapping in a thumbnail background.
         if (!this.defaultInitImgResult) {
-          video.getImageURL(url => {
-            const currentStyle = this.$item.getAttribute('style');
+          video.getImageURL((url) => {
+            const currentStyle = this.$item.getAttribute("style");
             if (currentStyle) {
-              this.$item.setAttribute('data-jarallax-original-styles', currentStyle);
+              this.$item.setAttribute("data-jarallax-original-styles", currentStyle);
             }
             this.css(this.$item, {
               backgroundImage: `url("${url}")`,
-              backgroundPosition: 'center',
-              backgroundSize: 'cover'
+              backgroundPosition: "center",
+              backgroundSize: "cover"
             });
           });
         }
         return defaultResult;
       }
-      video.on('ready', () => {
-        // Visibility-driven play/pause is applied by wrapping the existing onScroll implementation.
+      video.on("ready", () => {
         if (this.options.videoPlayOnlyVisible) {
           const oldOnScroll = this.onScroll;
           this.onScroll = function onScrollPlayVideo() {
@@ -1221,8 +1224,7 @@
           video.play();
         }
       });
-      video.on('started', () => {
-        // Once the real video starts, it becomes the active visual source used by core sizing logic.
+      video.on("started", () => {
         this.image.$default_item = this.image.$item;
         this.image.$item = this.$video;
         this.image.width = this.video?.videoWidth || 1280;
@@ -1230,25 +1232,24 @@
         this.coverImage();
         this.onScroll();
         if (this.image.$default_item) {
-          this.image.$default_item.style.display = 'none';
+          this.image.$default_item.style.display = "none";
         }
       });
-      video.on('ended', () => {
+      video.on("ended", () => {
         this.videoEnded = true;
         if (!this.options.videoLoop) {
           resetDefaultImage();
         }
       });
-      video.on('error', () => {
+      video.on("error", () => {
         this.videoError = true;
         resetDefaultImage();
       });
       this.video = video;
       if (!this.defaultInitImgResult) {
-        // Remote providers need an async thumbnail first; local videos can initialize immediately.
-        this.image.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
-        if (video.type !== 'local') {
-          video.getImageURL(url => {
+        this.image.src = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
+        if (video.type !== "local") {
+          video.getImageURL((url) => {
             this.image.bgImage = `url("${url}")`;
             this.init();
           });
@@ -1258,8 +1259,6 @@
       return defaultResult;
     };
     const defDestroy = Jarallax.prototype.destroy;
-
-    // Restore the original image reference before core destroy() tears down the DOM.
     Jarallax.prototype.destroy = function destroyVideo() {
       if (this.image.$default_item) {
         this.image.$item = this.image.$default_item;
@@ -1271,13 +1270,10 @@
 
   jarallaxVideo();
   ready(() => {
-    // Preserve the historical auto-init path for `[data-jarallax-video]` in script-tag usage.
-    if (typeof global$1.jarallax !== 'undefined') {
-      global$1.jarallax(document.querySelectorAll('[data-jarallax-video]'));
+    if (typeof global$1.jarallax !== "undefined") {
+      global$1.jarallax(document.querySelectorAll("[data-jarallax-video]"));
     }
   });
-
-  // VideoWorker remains global because downstream projects have historically relied on that side effect.
   if (!global$1.VideoWorker) {
     global$1.VideoWorker = VideoWorker;
   }

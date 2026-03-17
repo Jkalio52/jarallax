@@ -74,7 +74,10 @@ class Jarallax {
     Object.keys(dataOptions).forEach((key) => {
       const lowerCaseOption = key.slice(0, 1).toLowerCase() + key.slice(1);
 
-      if (lowerCaseOption && typeof this.defaults[lowerCaseOption as keyof JarallaxResolvedOptions] !== 'undefined') {
+      if (
+        lowerCaseOption &&
+        typeof this.defaults[lowerCaseOption as keyof JarallaxResolvedOptions] !== 'undefined'
+      ) {
         pureDataOptions[lowerCaseOption] = dataOptions[key];
       }
     });
@@ -100,8 +103,12 @@ class Jarallax {
     });
 
     this.options.speed = Math.min(2, Math.max(-1, parseFloat(`${this.options.speed}`)));
-    this.options.disableParallax = resolveDisableOption(userOptions?.disableParallax ?? this.options.disableParallax);
-    this.options.disableVideo = resolveDisableOption(userOptions?.disableVideo ?? this.options.disableVideo);
+    this.options.disableParallax = resolveDisableOption(
+      userOptions?.disableParallax ?? this.options.disableParallax
+    );
+    this.options.disableVideo = resolveDisableOption(
+      userOptions?.disableVideo ?? this.options.disableVideo
+    );
 
     // `elementInViewport` historically accepts a DOM node or a jQuery-like collection.
     let elementInVP = this.options.elementInViewport;

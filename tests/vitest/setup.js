@@ -35,7 +35,10 @@ function installGeometryStub(element) {
 beforeEach(() => {
   document.body.innerHTML = '<div id="app"></div>';
 
-  vi.stubGlobal('requestAnimationFrame', vi.fn(() => 1));
+  vi.stubGlobal(
+    'requestAnimationFrame',
+    vi.fn(() => 1)
+  );
   vi.stubGlobal('cancelAnimationFrame', vi.fn());
   vi.stubGlobal('IntersectionObserver', FakeIntersectionObserver);
 

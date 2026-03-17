@@ -1,18 +1,10 @@
-/* eslint-disable import/no-extraneous-dependencies */
-
-import { babel } from '@rollup/plugin-babel';
+import { nodeResolve } from '@rollup/plugin-node-resolve';
 import replace from '@rollup/plugin-replace';
 import terser from '@rollup/plugin-terser';
-import { nodeResolve } from '@rollup/plugin-node-resolve';
 import copy from 'rollup-plugin-copy';
+import esbuild from 'rollup-plugin-esbuild';
 import serve from 'rollup-plugin-serve';
 import CleanCSS from 'clean-css';
-
-// TODO: Wait once this issue will be fixed before update the terser plugin https://github.com/rollup/plugins/issues/1371
-// TODO: Remove this hack once this issue will be resolved https://github.com/rollup/plugins/issues/1366
-import { fileURLToPath } from 'url';
-const __filename = fileURLToPath(import.meta.url);
-global['__filename'] = __filename;
 
 import data from './package.json' with { type: 'json' };
 
@@ -143,6 +135,14 @@ const isMinEnv = (file) => file.includes('.min.');
 const isSpecificEnv = (file) => isMinEnv(file);
 const isDebugAlways = (file) => (isDev() || isUMD(file) ? 'true' : 'false');
 
+function createTypeScriptPlugin() {
+  return esbuild({
+    sourceMap: true,
+    target: 'es2020',
+    tsconfig: './tsconfig.json',
+  });
+}
+
 const configs = bundles.map(({ input: inputPath, output }) => ({
   input: inputPath,
   output,
@@ -150,12 +150,7 @@ const configs = bundles.map(({ input: inputPath, output }) => ({
     nodeResolve({
       extensions: ['.mjs', '.js', '.json', '.node', '.ts'],
     }),
-    babel({
-      extensions: ['.js', '.ts'],
-      babelHelpers: 'bundled',
-      presets: ['@babel/preset-typescript'],
-      plugins: ['annotate-pure-calls'],
-    }),
+    createTypeScriptPlugin(),
     replace({
       __DEV__: isSpecificEnv(output.file)
         ? isDebugAlways(output.file)

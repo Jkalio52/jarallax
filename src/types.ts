@@ -29,7 +29,13 @@ export interface JarallaxWindowData {
 }
 
 export type DisableOption = boolean | RegExp | string | (() => boolean);
-export type JarallaxMethodName = 'destroy' | 'onResize' | 'onScroll' | 'isVisible' | 'clipContainer' | 'coverImage';
+export type JarallaxMethodName =
+  | 'destroy'
+  | 'onResize'
+  | 'onScroll'
+  | 'isVisible'
+  | 'clipContainer'
+  | 'coverImage';
 export type JarallaxItem = HTMLElement & { jarallax?: JarallaxInstance };
 export type JarallaxItems = JarallaxItem | ArrayLike<JarallaxItem>;
 
@@ -69,7 +75,8 @@ export interface JarallaxOptions {
   threshold?: string;
 }
 
-export interface JarallaxResolvedOptions extends Omit<JarallaxOptions, 'disableParallax' | 'disableVideo'> {
+export interface JarallaxResolvedOptions
+  extends Omit<JarallaxOptions, 'disableParallax' | 'disableVideo'> {
   type: string;
   speed: number;
   containerClass: string;
@@ -142,7 +149,10 @@ export interface JarallaxInstance {
   };
   css(el: HTMLElement, styles: string): string;
   css(el: HTMLElement, styles: Record<string, string | number>): HTMLElement;
-  extend<T extends Record<string, unknown>>(out: T, ...args: Array<Record<string, unknown> | null | undefined>): T;
+  extend<T extends Record<string, unknown>>(
+    out: T,
+    ...args: Array<Record<string, unknown> | null | undefined>
+  ): T;
   getWindowData(): JarallaxWindowData;
   initImg(): boolean;
   canInitParallax(): boolean;

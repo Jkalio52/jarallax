@@ -1,7 +1,7 @@
 import VideoWorker from 'video-worker';
 
-import global from './utils/global';
 import type { JarallaxCoverImageData, JarallaxInstance, JarallaxStatic } from './types';
+import global from './utils/global';
 
 function jarallaxVideo(jarallax: JarallaxStatic | undefined = global.jarallax): void {
   if (typeof jarallax === 'undefined') {
@@ -26,7 +26,7 @@ function jarallaxVideo(jarallax: JarallaxStatic | undefined = global.jarallax): 
     }
 
     this.isVideoInserted = true;
-    this.video!.getVideo((video: HTMLElement) => {
+    this.video?.getVideo((video: HTMLElement) => {
       const insertedVideo = video as HTMLIFrameElement | HTMLVideoElement;
       const parent = insertedVideo.parentNode as HTMLElement | null;
 
@@ -73,8 +73,10 @@ function jarallaxVideo(jarallax: JarallaxStatic | undefined = global.jarallax): 
   const defCoverImage = Jarallax.prototype.coverImage;
 
   // Reuse the core cover logic, then resize the actual video element to match the computed image box.
-  Jarallax.prototype.coverImage = function coverVideo(this: JarallaxInstance): JarallaxCoverImageData | true | void {
-    const imageData = defCoverImage.apply(this) as JarallaxCoverImageData | true | void;
+  Jarallax.prototype.coverImage = function coverVideo(
+    this: JarallaxInstance
+  ): JarallaxCoverImageData | true | undefined {
+    const imageData = defCoverImage.apply(this) as JarallaxCoverImageData | true | undefined;
     const node = this.image.$item?.nodeName;
 
     if (
@@ -137,7 +139,9 @@ function jarallaxVideo(jarallax: JarallaxStatic | undefined = global.jarallax): 
   const defCanInitParallax = Jarallax.prototype.canInitParallax;
 
   // Video setup happens inside canInitParallax() so the extension can decide between real parallax and static fallback.
-  Jarallax.prototype.canInitParallax = function canInitVideoParallax(this: JarallaxInstance): boolean {
+  Jarallax.prototype.canInitParallax = function canInitVideoParallax(
+    this: JarallaxInstance
+  ): boolean {
     let defaultResult = defCanInitParallax.apply(this) as boolean;
 
     if (!this.options.videoSrc) {
@@ -208,7 +212,10 @@ function jarallaxVideo(jarallax: JarallaxStatic | undefined = global.jarallax): 
         this.onScroll = function onScrollPlayVideo(this: JarallaxInstance): void {
           oldOnScroll.apply(this);
 
-          if (!this.videoError && (this.options.videoLoop || (!this.options.videoLoop && !this.videoEnded))) {
+          if (
+            !this.videoError &&
+            (this.options.videoLoop || (!this.options.videoLoop && !this.videoEnded))
+          ) {
             if (this.isVisible()) {
               video.play();
             } else {

@@ -15,7 +15,16 @@ function jarallaxElement(jarallax: JarallaxStatic | undefined = global.jarallax)
 
   // The deprecated element extension historically worked by patching core instance methods in place.
   (
-    ['initImg', 'canInitParallax', 'init', 'destroy', 'coverImage', 'isVisible', 'onScroll', 'onResize'] as const
+    [
+      'initImg',
+      'canInitParallax',
+      'init',
+      'destroy',
+      'coverImage',
+      'isVisible',
+      'onScroll',
+      'onResize',
+    ] as const
   ).forEach((key) => {
     const def = Jarallax.prototype[key] as (...args: unknown[]) => unknown;
 
@@ -88,11 +97,19 @@ function jarallaxElement(jarallax: JarallaxStatic | undefined = global.jarallax)
           let my = moveY;
           let mx = moveX;
 
-          if (this.options.thresholdY !== null && typeof this.options.thresholdY !== 'undefined' && moveY > this.options.thresholdY) {
+          if (
+            this.options.thresholdY !== null &&
+            typeof this.options.thresholdY !== 'undefined' &&
+            moveY > this.options.thresholdY
+          ) {
             my = 0;
           }
 
-          if (this.options.thresholdX !== null && typeof this.options.thresholdX !== 'undefined' && moveX > this.options.thresholdX) {
+          if (
+            this.options.thresholdX !== null &&
+            typeof this.options.thresholdX !== 'undefined' &&
+            moveX > this.options.thresholdX
+          ) {
             mx = 0;
           }
 

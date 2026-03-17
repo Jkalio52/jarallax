@@ -1,18 +1,13 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
-const micromatch = require('micromatch');
+function runBiomeOnSupportedFiles(filenames) {
+  const files = filenames.filter((file) => !file.startsWith('dist/'));
 
-function excludeVendor(lint) {
-  return (filenames) => {
-    const files = micromatch(filenames, '!dist/**/*');
+  if (files.length) {
+    return `biome check --write ${files.join(' ')}`;
+  }
 
-    if (files && files.length) {
-      return `${lint} ${files.join(' ')}`;
-    }
-
-    return [];
-  };
+  return [];
 }
 
 module.exports = {
-  'src/**/*.js': excludeVendor('eslint'),
+  '*.{js,json,mjs,ts,css}': runBiomeOnSupportedFiles,
 };

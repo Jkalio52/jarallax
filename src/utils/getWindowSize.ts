@@ -11,8 +11,7 @@ let deviceHelper: HTMLDivElement | null = null;
 function getDeviceHeight(): number {
   if (!deviceHelper && document.body) {
     deviceHelper = document.createElement('div');
-    deviceHelper.style.cssText =
-      'position: fixed; top: -9999px; left: 0; height: 100vh; width: 0;';
+    deviceHelper.style.cssText = 'position: fixed; top: -9999px; left: 0; height: 100vh; width: 0;';
     document.body.appendChild(deviceHelper);
   }
 
@@ -25,7 +24,9 @@ function getDeviceHeight(): number {
 
 function updateWindowHeight(): void {
   wndW = global.innerWidth || document.documentElement.clientWidth;
-  wndH = isMobile() ? getDeviceHeight() : global.innerHeight || document.documentElement.clientHeight;
+  wndH = isMobile()
+    ? getDeviceHeight()
+    : global.innerHeight || document.documentElement.clientHeight;
 }
 
 // Prime the cached viewport size once and then keep it in sync through global events.
