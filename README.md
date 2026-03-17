@@ -90,11 +90,11 @@ We ship self-hosted ESM bundles (`dist/jarallax.esm.js` and `dist/jarallax.esm.m
 
 ```html
 <!-- Jarallax CSS -->
-<link href="https://cdn.jsdelivr.net/npm/jarallax@2/dist/jarallax.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/jarallax@3/dist/jarallax.min.css" rel="stylesheet">
 
 <!-- Jarallax JS -->
 <script type="module">
-  import { jarallax, jarallaxVideo } from "https://cdn.jsdelivr.net/npm/jarallax@2/+esm";
+  import { jarallax, jarallaxVideo } from "https://cdn.jsdelivr.net/npm/jarallax@3/+esm";
 
   // Optional video extension
   jarallaxVideo();
@@ -120,13 +120,13 @@ Jarallax may be also used in a traditional way by including script in HTML and u
 
 ```html
 <!-- Jarallax CSS -->
-<link href="https://cdn.jsdelivr.net/npm/jarallax@2/dist/jarallax.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/jarallax@3/dist/jarallax.min.css" rel="stylesheet">
 
 <!-- Jarallax JS -->
-<script src="https://cdn.jsdelivr.net/npm/jarallax@2/dist/jarallax.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jarallax@3/dist/jarallax.min.js"></script>
 
 <!-- Jarallax JS: Optional video extension -->
-<script src="https://cdn.jsdelivr.net/npm/jarallax@2/dist/jarallax-video.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jarallax@3/dist/jarallax-video.min.js"></script>
 ```
 
 ### Package Imports (Bundlers / Node)
