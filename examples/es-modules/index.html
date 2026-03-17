@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>ES Modules Example</title>
 
     <!-- Demo Styles -->
-    <link href="./style.css" rel="stylesheet" />
+    <link href="./style.css" rel="stylesheet">
 
     <!-- Jarallax CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/jarallax@2/dist/jarallax.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/jarallax@2/dist/jarallax.min.css" rel="stylesheet">
   </head>
   <body>
     <section class="section section-intro">
@@ -24,7 +24,7 @@
     </section>
 
     <div class="jarallax">
-      <img class="jarallax-img" src="https://jarallax.nkdev.info/images/image-1.jpg" alt="" />
+      <img class="jarallax-img" src="https://jarallax.nkdev.info/images/image-1.jpg" alt="">
       <div class="hero-content">
         <p class="eyebrow">Image Parallax</p>
         <h2>Browser ESM Example</h2>
@@ -36,7 +36,8 @@
       <div class="section-inner panel">
         <p class="eyebrow">ES Modules</p>
         <p>
-          The ESM entry lets you import the core and optional video extension with standard module syntax.
+          The ESM entry lets you import the core and optional video extension with standard module
+          syntax.
         </p>
       </div>
     </section>
@@ -51,12 +52,12 @@
 
     <!-- Init Jarallax -->
     <script type="module">
-      import { jarallax, jarallaxVideo } from "https://cdn.jsdelivr.net/npm/jarallax@2/+esm";
+    import { jarallax, jarallaxVideo } from 'https://cdn.jsdelivr.net/npm/jarallax@2/+esm';
 
-      // Optional video extension
-      jarallaxVideo();
+    // Optional video extension
+    jarallaxVideo();
 
-      jarallax(document.querySelectorAll(".jarallax"));
+    jarallax(document.querySelectorAll('.jarallax'));
     </script>
   </body>
 </html>

@@ -10,32 +10,5 @@
     "source.fixAll.biome": "explicit"
   },
 
-  // Disable other formatters for files Biome handles
-  "[javascript]": {
-    "editor.defaultFormatter": "biomejs.biome"
-  },
-  "[javascriptreact]": {
-    "editor.defaultFormatter": "biomejs.biome"
-  },
-  "[typescript]": {
-    "editor.defaultFormatter": "biomejs.biome"
-  },
-  "[typescriptreact]": {
-    "editor.defaultFormatter": "biomejs.biome"
-  },
-  "[json]": {
-    "editor.defaultFormatter": "biomejs.biome"
-  },
-  "[jsonc]": {
-    "editor.defaultFormatter": "biomejs.biome"
-  },
-
-  "npm.exclude": [
-    "**/dist",
-    "**/dist/**",
-    "**/demo",
-    "**/demo/**",
-    "**/examples",
-    "**/examples/**"
-  ]
+  "npm.exclude": ["**/dist", "**/dist/**", "**/demo", "**/demo/**", "**/examples", "**/examples/**"]
 }

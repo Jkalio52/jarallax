@@ -10,7 +10,6 @@ import { describe, expect, it } from 'vitest';
 const rootDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const require = createRequire(import.meta.url);
 
-
 describe('build artifact compatibility', () => {
   it('keeps package entry points aligned with the Phase 1 snapshot', () => {
     const pkg = JSON.parse(fs.readFileSync(path.join(rootDir, 'package.json'), 'utf8'));

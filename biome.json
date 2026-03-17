@@ -2,25 +2,17 @@
   "$schema": "https://biomejs.dev/schemas/2.4.7/schema.json",
   "files": {
     "includes": [
-      "src/**/*.ts",
-      "src/**/*.css",
-      "!src/**/*.d.ts",
-      "examples/**/*.js",
-      "examples/**/*.jsx",
-      "examples/**/*.css",
-      "examples/**/*.html",
-      "examples/**/package.json",
-      "!examples/**/.next",
-      "!examples/**/node_modules",
-      "!examples/**/dist",
-      "tests/**/*.js",
+      "src/**",
+      "tests/**",
+      "examples/**",
+      ".vscode/**",
+      "!**/*.d.ts",
+      "!!examples/**/.next",
+      "!!examples/**/dist",
       "package.json",
-      "tsconfig.json",
-      "tsconfig.build.json",
-      "tsconfig.tests.json",
-      "rollup.config.mjs",
-      "vitest.config.mjs",
-      "lint-staged.config.js",
+      "tsconfig*.json",
+      "*.config.js",
+      "*.config.mjs",
       "biome.json"
     ]
   },
@@ -57,6 +49,16 @@
     "formatter": {
       "indentStyle": "space",
       "indentWidth": 2
+    }
+  },
+  "css": {
+    "formatter": {
+      "enabled": true
+    }
+  },
+  "html": {
+    "formatter": {
+      "enabled": true
     }
   }
 }
