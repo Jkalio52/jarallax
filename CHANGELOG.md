@@ -1,5 +1,15 @@
 # Changelog
 
+## [3.0.0] - Mar 17, 2026
+
+- updated package metadata and TypeScript declarations while keeping existing public import paths available
+- updated build/runtime toolchain and package dependencies, including `video-worker` v3, Rollup 4, TypeScript 5, Biome, Vitest, and jQuery 4
+- added first-party React support via `jarallax/react` with `Jarallax`, `JarallaxImage`, `JarallaxVideo`, `useJarallax`, and `useJarallaxVideo`
+- added SSR-safe runtime guards so the package root can be imported in SSR and Node toolchains without touching the DOM during module evaluation
+- converted the source codebase fully to TypeScript and started publishing generated declaration files for the main package and React entry
+- improved package import/docs coverage and refreshed examples for React, React Hooks, ES modules, plain JavaScript, HTML, jQuery, and Next.js App Router
+- refreshed automated validation with a new CI workflow, Vitest-based integration coverage, and package artifact checks
+
 ## [2.2.1] - May 4, 2024
 
 - added support for boolean in `disableParallax` and `disableVideo` options
